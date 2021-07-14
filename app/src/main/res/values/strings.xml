@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Raksha</string>
+    <string name="sos">SOS</string>
+    <string name="hint"><font size = "20"></font></string>
+</resources>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_focused"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0" />
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@id/guideline3"
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+
+        app:navigationIcon="@android:drawable/ic_menu_revert"
+
+        app:title="Instructions"
+
+        app:titleTextColor="@android:color/background_light">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="20sp"
+
+
+        android:layout_marginRight="20sp"
+
+        android:gravity="start"
+        android:justificationMode="inter_word"
+        android:padding="20sp"
+        android:text="\nRegister your emergency contact numbers under HOME/SOS and SAVE."
+
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textColorHint="@color/c3"
+
+
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textSize="12sp"
+        android:typeface="monospace"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/guideline3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="20sp"
+
+
+        android:layout_marginRight="20sp"
+
+        android:gravity="start"
+        android:justificationMode="inter_word"
+        android:padding="20sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textSize="12sp"
+
+
+
+        android:text="Press the SOS button on the home page in case of an emergency. On pressing the button, an SOS message along with the link of your current location on google  maps will be send to the emergency contacts."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+
+
+        android:textColorHint="@color/c3"
+
+        android:typeface="monospace"
+        app:layout_constraintBottom_toTopOf="@id/guideline5"
+        app:layout_constraintTop_toBottomOf="@id/guideline4" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="20sp"
+
+        android:layout_marginRight="20sp"
+
+        android:gravity="start"
+        android:justificationMode="inter_word"
+        android:padding="20sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textSize="12sp"
+
+
+        android:text="Use the switch at the 'Fall Detection' page to turn ON/OFF Fall detection functionality and set the Sensitivity value as per your requirement. Switch turned ON will run the application in the background and if any violent shake/fall is detected,  an auto SOS procedure is initiated. You are advised to set your most preferable sensitivity value before registering contacts."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+
+
+        android:textColorHint="@color/c3"
+
+        android:typeface="monospace"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintTop_toBottomOf="@id/guideline5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="20sp"
+
+        android:layout_marginRight="20sp"
+
+        android:gravity="start"
+        android:justificationMode="inter_word"
+        android:padding="20sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textSize="12sp"
+
+
+        android:text="We recommend to turn ON the Fall Detection switch only when you are out of your home for battery optimization."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+
+
+        android:textColorHint="@color/c3"
+
+        android:typeface="monospace"
+        app:layout_constraintBottom_toTopOf="@id/guideline7"
+        app:layout_constraintTop_toBottomOf="@id/guideline6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="20sp"
+
+        android:layout_marginRight="20sp"
+
+
+        android:gravity="start"
+        android:justificationMode="inter_word"
+        android:padding="20sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textSize="12sp"
+
+
+        android:text="For dual sim phones, please make sure to insert your messaging SIM in slot 1."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+
+
+        android:textColorHint="@color/c3"
+
+        android:typeface="monospace"
+        app:layout_constraintBottom_toTopOf="@id/guideline8"
+        app:layout_constraintTop_toBottomOf="@id/guideline7" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9  " />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0  " />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

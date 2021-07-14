@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/common_google_signin_btn_text_dark_focused"
+    tools:context=".FallDetection">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fallDetection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+
+
+        app:navigationIcon="@android:drawable/ic_menu_revert"
+
+        app:title="Fall Detection"
+
+        app:titleTextColor="@android:color/background_light">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <Switch
+        android:id="@+id/fallDetect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:textColor="@android:color/holo_blue_bright"
+
+
+        android:textColorLink="@color/colorAccent"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline11"
+        app:layout_constraintEnd_toEndOf="@id/guideline14"
+        app:layout_constraintStart_toStartOf="@id/guideline13"
+        app:layout_constraintTop_toBottomOf="@id/guideline10"
+        tools:layout_editor_absoluteX="111dp"
+        tools:layout_editor_absoluteY="323dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150sp"
+        android:ems="9"
+        android:text=" Sensitivity"
+        android:textColor="@color/design_default_color_on_primary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline16"
+        app:layout_constraintEnd_toEndOf="@id/guideline15"
+        app:layout_constraintStart_toStartOf="@id/guideline13"
+        app:layout_constraintTop_toBottomOf="@id/guideline11"
+
+        />
+
+    <EditText
+        android:id="@+id/senstivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:gravity="center"
+        android:layout_marginRight="20sp"
+
+        android:hint="@string/hint"
+        android:inputType="number"
+        android:maxLength="2"
+
+
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline16"
+        app:layout_constraintEnd_toEndOf="@id/guideline14"
+        app:layout_constraintStart_toStartOf="@id/guideline15"
+        app:layout_constraintTop_toBottomOf="@id/guideline11" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
+
+        android:layout_marginRight="50sp"
+        android:background="@drawable/border"
+        android:ems="10"
+
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:typeface="monospace"
+        android:justificationMode="inter_word"
+        android:text="Please set your Fall detection sensitivity value b/w 0 and 99.\nValue 0 - High Sensitivity\ni.e. auto SOS initiates at very small shakes/fall.
+        \nValue 99 means Low Sensitivity.\ni.e. auto SOS initiates at very violent shakes/fall."
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline12"
+
+        app:layout_constraintTop_toBottomOf="@id/textView4" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

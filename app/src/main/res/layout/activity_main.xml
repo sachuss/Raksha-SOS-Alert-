@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/twohand"
+        tools:context=".MainActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/common_google_signin_btn_text_dark_focused"
+
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:visibility="visible"
+            app:popupTheme="@style/MaterialAlertDialog.MaterialComponents.Title.Panel"
+            app:title="@string/app_name"
+            app:titleTextAppearance="@style/AppTheme"
+            app:titleTextColor="?attr/colorBackgroundFloating">
+
+
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:entries="@array/spinnerItems"
+                android:spinnerMode="dropdown" />
+
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+        <Button
+            android:id="@+id/sosButton"
+            android:layout_width="100dp"
+
+            android:layout_height="100dp"
+            android:background="@drawable/circle"
+
+
+
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+
+
+            android:text="@string/sos"
+
+            android:textColor="#FFFFFF"
+
+
+            android:textSize="30sp" />
+</RelativeLayout>
+
+    </RelativeLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
