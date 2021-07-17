@@ -114,7 +114,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
 
 
-     ///  startLocationUpdates();
+       startLocationUpdates();
         if(MyGlobalClass.phoneNumber1.length() == 0)
         {
             loadBgData();

@@ -374,14 +374,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         msg =
                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
                         + "&travelmode=driving";
-        List<Address> addresses;
+      /*  List<Address> addresses;
         Geocoder geocoder;
         String cityName = "";
         geocoder = new Geocoder(this, Locale.getDefault());
         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        cityName = addresses.get(0).getAddressLine(0);
+        cityName = addresses.get(0).getAddressLine(0);*/
 
-Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+//Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
 
 
     }
