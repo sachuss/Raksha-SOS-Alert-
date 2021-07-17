@@ -86,6 +86,8 @@ public class BG extends Service implements ComponentCallbacks2 {
 
 
     String cityName = "",preCityName="";
+    float x,y,z,delta;
+    int senValue;
 
     public BG() {
     }
@@ -100,6 +102,8 @@ public class BG extends Service implements ComponentCallbacks2 {
     @Override
     public void onCreate() {
 
+
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
@@ -110,7 +114,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
 
 
-       startLocationUpdates();
+     ///  startLocationUpdates();
         if(MyGlobalClass.phoneNumber1.length() == 0)
         {
             loadBgData();
@@ -176,6 +180,7 @@ public void loadBgData()
         final Notification notification = notificationBuilder.build();
 
             startForeground(1, notification);
+
 
         if(MyGlobalClass.checking)
         {
@@ -250,15 +255,15 @@ public void loadBgData()
 
 
 
-            float x = sensorEvent.values[0];
-            float y = sensorEvent.values[1];
-            float z = sensorEvent.values[2];
+            x = sensorEvent.values[0];
+            y = sensorEvent.values[1];
+            z = sensorEvent.values[2];
             mAccelLast = mAccelCurrent;
             mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
-            float delta = mAccelCurrent - mAccelLast;
+            delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta;
             //mAccel > 38 (used value)
-            int senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
+             senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
 
                 if (mAccel > (senValue + 9)) {
 
@@ -406,18 +411,18 @@ public void loadBgData()
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
                 Toast.makeText(getApplicationContext(),"RUNNING CRITICAL",Toast.LENGTH_SHORT).show();
                 Log.v(TAG,"TRIM_MEMORY_RUNNING_CRITICAL");
-                System.gc();
+               // System.gc();
                //   stopSelf();
               //  stoptimertask();
 
-           Intent broadcastIntent = new Intent();
+         /*  Intent broadcastIntent = new Intent();
            broadcastIntent.setAction("restartservice");
            broadcastIntent.setClass(this, MyReceiver.class);
            this.sendBroadcast(broadcastIntent);
 
 
                 ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC,2000);
-                toneGenerator.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_INTERGROUP,150);
+                toneGenerator.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_INTERGROUP,150);*/
 
                 break;
             case ComponentCallbacks2.TRIM_MEMORY_BACKGROUND:
