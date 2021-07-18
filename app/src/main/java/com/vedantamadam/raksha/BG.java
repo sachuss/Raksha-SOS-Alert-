@@ -370,7 +370,7 @@ public void loadBgData()
 
 
 
-        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
 
         bgPhone1 = MyGlobalClass.phoneNumber1;
         bgPhone2 = MyGlobalClass.phoneNumber2;
