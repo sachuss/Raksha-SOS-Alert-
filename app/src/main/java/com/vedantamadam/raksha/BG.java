@@ -78,8 +78,8 @@ public class BG extends Service implements ComponentCallbacks2 {
 
     private LocationRequest mLocationRequest;
     LocationManager service;
-    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+ //   private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+ //   private long FASTEST_INTERVAL = 2000; /* 2 sec */
     boolean enabled;
     List<Address> addresses;
     Geocoder geocoder;
@@ -292,8 +292,8 @@ public void loadBgData()
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+    //    mLocationRequest.setInterval(UPDATE_INTERVAL);
+   //     mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
         mLocationRequest.setNumUpdates(1);
 

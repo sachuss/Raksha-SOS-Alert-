@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private LocationRequest mLocationRequest;
 
-    private long UPDATE_INTERVAL = 60 * 1000;  /* 60 secs */
+   // private long UPDATE_INTERVAL = 60 * 1000;  /* 60 secs */
 
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+  //  private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
 
     LocationManager service;
@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
 
+                startLocationUpdates();
 
-
-                    sosMessage();
+                 //   sosMessage();
 
 
 
@@ -318,10 +318,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        mLocationRequest.setSmallestDisplacement(250);
-        mLocationRequest.setNumUpdates(5);
+      //  mLocationRequest.setInterval(UPDATE_INTERVAL);
+     //   mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        mLocationRequest.setNumUpdates(1);
 
 
 
@@ -376,12 +376,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         msg =
                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
                         + "&travelmode=driving";
-       /* List<Address> addresses;
+        List<Address> addresses;
         Geocoder geocoder;
         String cityName = "";
         geocoder = new Geocoder(this, Locale.getDefault());
         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        cityName = addresses.get(0).getAddressLine(0);*/
+        cityName = addresses.get(0).getAddressLine(0);
+        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+        sosMessage();
 
 //Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
 
@@ -397,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
 
-        startLocationUpdates();
+   //     startLocationUpdates();
         super.onResume();
     }
 
