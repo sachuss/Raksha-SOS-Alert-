@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-
+import android.widget.TextView;
 
 
 public class about extends AppCompatActivity {
     Toolbar toolBar;
+    TextView textView1,textView2,textView3,textView4,textView5;
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -35,6 +38,14 @@ public class about extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void onDestroy() {
+
+        super.onDestroy();
+
 
     }
 

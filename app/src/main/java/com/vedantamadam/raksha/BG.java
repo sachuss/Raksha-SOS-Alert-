@@ -61,8 +61,8 @@ import java.util.TimerTask;
 public class BG extends Service implements ComponentCallbacks2 {
 
 
-    private Timer timer;
-    private TimerTask timerTask;
+   // private Timer timer;
+   // private TimerTask timerTask;
     public int counter=0;
 
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -78,7 +78,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
     private LocationRequest mLocationRequest;
     LocationManager service;
-    private long UPDATE_INTERVAL = 60 * 1000;  /* 60 secs */
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     boolean enabled;
     List<Address> addresses;
@@ -111,10 +111,12 @@ public class BG extends Service implements ComponentCallbacks2 {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
+        geocoder = new Geocoder(this, Locale.getDefault());
 
 
 
-       startLocationUpdates();
+
+      // startLocationUpdates();
         if(MyGlobalClass.phoneNumber1.length() == 0)
         {
             loadBgData();
@@ -131,7 +133,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
         edi.apply();
 
-        MyGlobalClass.checking = true;
+
 
         super.onCreate();
 
@@ -151,7 +153,7 @@ public void loadBgData()
 
 
 
-
+      //  startLocationUpdates();
 
         //   onTaskRemoved(intent);
 
@@ -182,11 +184,7 @@ public void loadBgData()
             startForeground(1, notification);
 
 
-        if(MyGlobalClass.checking)
-        {
-          //  Toast.makeText(this,"Inside onstart, checking is true", Toast.LENGTH_SHORT).show();
-     //       onTaskRemoved(intent);
-        }
+
 
 
         return START_STICKY;
@@ -267,37 +265,9 @@ public void loadBgData()
 
                 if (mAccel > (senValue + 9)) {
 
+                    startLocationUpdates();
+
                     Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_LONG).show();
-
-                    bgPhone1 = MyGlobalClass.phoneNumber1;
-                    bgPhone2 = MyGlobalClass.phoneNumber2;
-
-
-                    if (emergencySos.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Location updates not received", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-
-
-
-                        SmsManager sms = SmsManager.getDefault();
-                        ArrayList<String> emerMsg;
-                        emerMsg = sms.divideMessage(emergencySos);
-
-                        if (bgPhone1.length() == 13 && bgPhone2.length() == 13 && cityName != preCityName ){
-                            sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
-                            sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
-                            preCityName = cityName;
-
-                        }
-
-
-                    }
-
-                    bgPhone1 = null;
-                    bgPhone2 = null;
-
 
                 }
 
@@ -325,7 +295,7 @@ public void loadBgData()
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
-        mLocationRequest.setNumUpdates(1440);
+        mLocationRequest.setNumUpdates(1);
 
 
         service = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -360,6 +330,9 @@ public void loadBgData()
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
 
+                    //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
+
+
                         try {
                             onLocationChanged(locationResult.getLastLocation());
                         } catch (IOException e) {
@@ -383,15 +356,43 @@ public void loadBgData()
 
 
 
-        geocoder = new Geocoder(this, Locale.getDefault());
+
         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         cityName = addresses.get(0).getAddressLine(0);
+
+
+        sosAlert();
+
+
+    }
+
+    public void sosAlert(){
+
+
+
+        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+
+        bgPhone1 = MyGlobalClass.phoneNumber1;
+        bgPhone2 = MyGlobalClass.phoneNumber2;
+        if (bgPhone1.length() == 13 && bgPhone2.length() == 13 && !(cityName.equals(preCityName))){
+            SmsManager sms = SmsManager.getDefault();
+            ArrayList<String> emerMsg;
+            emerMsg = sms.divideMessage(emergencySos);
+            sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
+            sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
+            preCityName = cityName;
+            bgPhone1 = null;
+            bgPhone2 = null;
+        }
+
+
+
 
 
     }
 
 
-    @Override
+   /* @Override
     public void onTrimMemory(int level){
 
         switch(level)
@@ -414,6 +415,8 @@ public void loadBgData()
                // System.gc();
                //   stopSelf();
               //  stoptimertask();
+              */
+
 
          /*  Intent broadcastIntent = new Intent();
            broadcastIntent.setAction("restartservice");
@@ -424,7 +427,7 @@ public void loadBgData()
                 ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC,2000);
                 toneGenerator.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_INTERGROUP,150);*/
 
-                break;
+           /*     break;
             case ComponentCallbacks2.TRIM_MEMORY_BACKGROUND:
                 Toast.makeText(getApplicationContext(),"BACKGROUND",Toast.LENGTH_SHORT).show();
                 Log.v(TAG,"TRIM_MEMORY_BACKGROUND");
@@ -450,7 +453,7 @@ public void loadBgData()
 
         //    super.onTrimMemory(level);
 
-    }
+    }*/
 
 
 

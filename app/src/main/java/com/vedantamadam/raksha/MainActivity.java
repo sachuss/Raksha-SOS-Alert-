@@ -320,7 +320,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        mLocationRequest.setNumUpdates(30);
+        mLocationRequest.setSmallestDisplacement(250);
+        mLocationRequest.setNumUpdates(5);
+
 
 
         service = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -374,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         msg =
                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
                         + "&travelmode=driving";
-      /*  List<Address> addresses;
+       /* List<Address> addresses;
         Geocoder geocoder;
         String cityName = "";
         geocoder = new Geocoder(this, Locale.getDefault());

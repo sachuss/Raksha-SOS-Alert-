@@ -82,7 +82,7 @@ public class FallDetection extends AppCompatActivity implements ComponentCallbac
 
 
 
-                        MyGlobalClass.checking = true;
+
                         ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
 
 
@@ -108,7 +108,7 @@ public class FallDetection extends AppCompatActivity implements ComponentCallbac
     }
 
     public void unregisterList() {
-        MyGlobalClass.checking = false;
+
         Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
         //mSensorManager.unregisterListener(mSensorListener);
         stopService(serviceIntent);

@@ -46,33 +46,31 @@
 
 
     <TextView
+        android:id="@+id/t1"
         android:layout_width="match_parent"
+
+
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="20sp"
-
-
-        android:layout_marginRight="20sp"
-
-        android:gravity="start"
-        android:justificationMode="inter_word"
-        android:padding="20sp"
-        android:text="\nRegister your emergency contact numbers under HOME/SOS and SAVE."
-
-
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/holo_blue_bright"
-        android:textColorHint="@color/c3"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeStepGranularity="2sp"
 
 
         android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"
+        android:gravity="start"
+        android:justificationMode="inter_word"
+
+
+        android:padding="20sp"
+        android:text="\nRegister your emergency contact numbers under HOME/SOS and SAVE."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textColorHint="@color/c3"
         android:textSize="12sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/guideline3" />
+        app:layout_constraintTop_toBottomOf="@id/guideline3"
+        tools:layout_editor_absoluteX="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -82,23 +80,18 @@
         app:layout_constraintGuide_percent="0.2" />
 
     <TextView
+        android:id="@+id/t2"
         android:layout_width="match_parent"
+
+
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="20sp"
-
-
-        android:layout_marginRight="20sp"
-
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:gravity="start"
         android:justificationMode="inter_word"
         android:padding="20sp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"
-        android:textSize="12sp"
-
 
 
         android:text="Press the SOS button on the home page in case of an emergency. On pressing the button, an SOS message along with the link of your current location on google  maps will be send to the emergency contacts."
@@ -108,9 +101,11 @@
 
         android:textColorHint="@color/c3"
 
+        android:textSize="12sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline5"
-        app:layout_constraintTop_toBottomOf="@id/guideline4" />
+        app:layout_constraintTop_toBottomOf="@id/guideline4"
+        tools:layout_editor_absoluteX="20dp" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -121,21 +116,17 @@
         app:layout_constraintGuide_percent="0.4" />
 
     <TextView
+        android:id="@+id/t3"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="20sp"
-
-        android:layout_marginRight="20sp"
-
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:gravity="start"
         android:justificationMode="inter_word"
         android:padding="20sp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"
-        android:textSize="12sp"
 
 
         android:text="Use the switch at the 'Fall Detection' page to turn ON/OFF Fall detection functionality and set the Sensitivity value as per your requirement. Switch turned ON will run the application in the background and if any violent shake/fall is detected,  an auto SOS procedure is initiated. You are advised to set your most preferable sensitivity value before registering contacts."
@@ -145,9 +136,11 @@
 
         android:textColorHint="@color/c3"
 
+        android:textSize="12sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline6"
-        app:layout_constraintTop_toBottomOf="@id/guideline5" />
+        app:layout_constraintTop_toBottomOf="@id/guideline5"
+        tools:layout_editor_absoluteX="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -157,21 +150,17 @@
         app:layout_constraintGuide_percent="0.6" />
 
     <TextView
+        android:id="@+id/t4"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="20sp"
-
-        android:layout_marginRight="20sp"
-
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:gravity="start"
         android:justificationMode="inter_word"
         android:padding="20sp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"
-        android:textSize="12sp"
 
 
         android:text="We recommend to turn ON the Fall Detection switch only when you are out of your home for battery optimization."
@@ -181,9 +170,11 @@
 
         android:textColorHint="@color/c3"
 
+        android:textSize="12sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline7"
-        app:layout_constraintTop_toBottomOf="@id/guideline6" />
+        app:layout_constraintTop_toBottomOf="@id/guideline6"
+        tools:layout_editor_absoluteX="20dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -193,22 +184,18 @@
         app:layout_constraintGuide_percent="0.75" />
 
     <TextView
+        android:id="@+id/t5"
         android:layout_width="match_parent"
+
+
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="20sp"
-
-        android:layout_marginRight="20sp"
-
-
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:gravity="start"
         android:justificationMode="inter_word"
         android:padding="20sp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeStepGranularity="2sp"
-        android:textSize="12sp"
 
 
         android:text="For dual sim phones, please make sure to insert your messaging SIM in slot 1."
@@ -218,9 +205,11 @@
 
         android:textColorHint="@color/c3"
 
+        android:textSize="12sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline8"
-        app:layout_constraintTop_toBottomOf="@id/guideline7" />
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        tools:layout_editor_absoluteX="20dp" />
 
 
     <androidx.constraintlayout.widget.Guideline
