@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         phGlobal1 = MyGlobalClass.phoneNumber1;
         phGlobal2 = MyGlobalClass.phoneNumber2;
 
-        if(phGlobal1.length() > 0 && phGlobal2.length() > 0) {
+        if(phGlobal1.length() > 0 || phGlobal2.length() > 0) {
 
             SmsManager sms = SmsManager.getDefault();
             ArrayList<String> messages = null;
