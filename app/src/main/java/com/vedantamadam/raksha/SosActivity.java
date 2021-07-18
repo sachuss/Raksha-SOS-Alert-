@@ -64,7 +64,7 @@ public class SosActivity extends AppCompatActivity  {
 
 
 
-                if((emergencyNo1.getText().length()  == 10) && (emergencyNo2.getText().length()  == 10))   {
+                if((emergencyNo1.getText().length()  == 10) || (emergencyNo2.getText().length()  == 10))   {
 
 
 

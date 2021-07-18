@@ -263,7 +263,7 @@ public void loadBgData()
             //mAccel > 38 (used value)
              senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
 
-                if (mAccel > (senValue + 9)) {
+                if (mAccel > (senValue + 9 )) {
 
                     startLocationUpdates();
 
@@ -374,12 +374,18 @@ public void loadBgData()
 
         bgPhone1 = MyGlobalClass.phoneNumber1;
         bgPhone2 = MyGlobalClass.phoneNumber2;
-        if (bgPhone1.length() == 13 && bgPhone2.length() == 13 && !(cityName.equals(preCityName))){
+        if (!(cityName.equals(preCityName))){
+
             SmsManager sms = SmsManager.getDefault();
             ArrayList<String> emerMsg;
             emerMsg = sms.divideMessage(emergencySos);
-            sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
-            sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
+            if( bgPhone1.length() == 13) {
+                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
+            }
+            if( bgPhone2.length() == 13) {
+
+                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
+            }
             preCityName = cityName;
             bgPhone1 = null;
             bgPhone2 = null;
