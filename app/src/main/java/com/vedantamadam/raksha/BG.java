@@ -334,7 +334,13 @@ public void loadBgData()
                         emergencySos =
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
-                        Toast.makeText(getApplicationContext(),emergencySos,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(),emergencySos,Toast.LENGTH_LONG).show();
+                        try {
+                            addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        cityName = addresses.get(0).getAddressLine(0);
                         sosAlert();
                         //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
 

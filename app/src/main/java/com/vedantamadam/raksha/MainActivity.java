@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         msg =
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
-                       Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+                     //  Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
                         sosMessage();
 
                         try {
