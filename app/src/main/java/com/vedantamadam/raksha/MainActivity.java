@@ -363,7 +363,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
                      //  Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
-                        sosMessage();
+//                        sosMessage();
+                        phGlobal1 = MyGlobalClass.phoneNumber1;
+                        phGlobal2 = MyGlobalClass.phoneNumber2;
+                        if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
+                            String[] phNos = {phGlobal1, phGlobal2};
+                            MyGlobalClass glbclsobj = new MyGlobalClass();
+                            glbclsobj.sendSMS(phNos, msg);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+                        }
 
                         try {
                             onLocationChanged(locationResult.getLastLocation());
@@ -390,8 +399,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         geocoder = new Geocoder(this, Locale.getDefault());
         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         cityName = addresses.get(0).getAddressLine(0);
+
         Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();*/
     //   sosMessage();
+
+//        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+//
+////        sosMessage();
+//        phGlobal1 = MyGlobalClass.phoneNumber1;
+//        phGlobal2 = MyGlobalClass.phoneNumber2;
+//        if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
+//            String[] phNos = {phGlobal1, phGlobal2};
+//            MyGlobalClass glbclsobj = new MyGlobalClass();
+//            glbclsobj.sendSMS(phNos, msg);
+//        } else {
+//            Toast.makeText(this, "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+//        }
+
 
 //Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
 

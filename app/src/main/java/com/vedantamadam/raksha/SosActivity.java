@@ -70,10 +70,10 @@ public class SosActivity extends AppCompatActivity  {
 
 
 
-                    sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
-                    SharedPreferences.Editor edito = sharedPreferences.edit();
-                    edito.putString("e1", emergencyNo1.getText().toString());
-                    edito.putString("e2", emergencyNo2.getText().toString());
+                        sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
+                        SharedPreferences.Editor edito = sharedPreferences.edit();
+                        edito.putString("e1", emergencyNo1.getText().toString());
+                        edito.putString("e2", emergencyNo2.getText().toString());
 
                     edito.apply();
 
