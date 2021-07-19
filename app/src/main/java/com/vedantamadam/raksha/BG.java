@@ -78,6 +78,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
     private LocationRequest mLocationRequest;
     LocationManager service;
+    Location mLocation;
  //   private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
  //   private long FASTEST_INTERVAL = 2000; /* 2 sec */
     boolean enabled;
@@ -263,7 +264,7 @@ public void loadBgData()
             //mAccel > 38 (used value)
              senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
 
-                if (mAccel > (senValue + 9 )) {
+                if (mAccel > (senValue)) {
 
                     startLocationUpdates();
 
@@ -329,8 +330,13 @@ public void loadBgData()
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
-
-                    //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
+                        mLocation = locationResult.getLastLocation();
+                        emergencySos =
+                                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                                        + "&travelmode=driving";
+                        Toast.makeText(getApplicationContext(),emergencySos,Toast.LENGTH_LONG).show();
+                        sosAlert();
+                        //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
 
 
                         try {
@@ -348,7 +354,7 @@ public void loadBgData()
 
 
 
-        emergencySos =
+       /* emergencySos =
                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() +"," + location.getLongitude()
                         + "&travelmode=driving";
 
@@ -361,7 +367,7 @@ public void loadBgData()
         cityName = addresses.get(0).getAddressLine(0);
 
 
-        sosAlert();
+        sosAlert();*/
 
 
     }
@@ -386,6 +392,7 @@ public void loadBgData()
 
                 sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
             }
+            Toast.makeText(this,"Sending message",Toast.LENGTH_LONG).show();
             preCityName = cityName;
             bgPhone1 = null;
             bgPhone2 = null;

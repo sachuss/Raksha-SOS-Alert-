@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     LocationManager service;
+    Location mLocation;
     boolean enabled;
 
 
@@ -357,6 +358,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
 
+                        mLocation = locationResult.getLastLocation();
+                        msg =
+                                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                                        + "&travelmode=driving";
+                       Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
+                        sosMessage();
+
                         try {
                             onLocationChanged(locationResult.getLastLocation());
                         } catch (IOException e) {
@@ -373,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-        msg =
+      /*  msg =
                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
                         + "&travelmode=driving";
         List<Address> addresses;
@@ -382,8 +390,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         geocoder = new Geocoder(this, Locale.getDefault());
         addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         cityName = addresses.get(0).getAddressLine(0);
-        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-        sosMessage();
+        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();*/
+    //   sosMessage();
 
 //Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
 
