@@ -24,15 +24,11 @@ import android.location.Geocoder;
 import android.location.Location;
 
 import android.location.LocationManager;
-import android.media.AudioManager;
-import android.media.ToneGenerator;
 import android.os.Build;
 
 import android.os.IBinder;
 import android.os.Looper;
 
-import android.telephony.SmsManager;
-import android.util.Log;
 
 import android.widget.Toast;
 
@@ -50,12 +46,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class BG extends Service implements ComponentCallbacks2 {
@@ -263,12 +257,15 @@ public void loadBgData()
             mAccel = mAccel * 0.9f + delta;
             //mAccel > 38 (used value)
              senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
+                int offset = 9;
+//                offset = 4; //Use when testing
 
-                if (mAccel > (senValue)) {
 
+//                if (mAccel > (senValue)) {
+            if (mAccel > (senValue + offset )) {
                     startLocationUpdates();
 
-                    Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -341,7 +338,13 @@ public void loadBgData()
                             e.printStackTrace();
                         }
                         cityName = addresses.get(0).getAddressLine(0);
-                        sosAlert();
+//                        sosAlert();
+                        if (!(cityName.equals(preCityName))) {
+                            String[] phNos = {MyGlobalClass.phoneNumber1, MyGlobalClass.phoneNumber2};
+                            MyGlobalClass glbclsobj = new MyGlobalClass();
+                            glbclsobj.sendSMS(phNos, emergencySos);
+                            preCityName = cityName;
+                        }
                         //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
 
 
@@ -373,42 +376,77 @@ public void loadBgData()
         cityName = addresses.get(0).getAddressLine(0);
 
 
+
         sosAlert();*/
 
 
     }
 
-    public void sosAlert(){
+//    public void sosAlert(){
+//
+//
+//
+//     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+//
+//        bgPhone1 = MyGlobalClass.phoneNumber1;
+//        bgPhone2 = MyGlobalClass.phoneNumber2;
+//        if (!(cityName.equals(preCityName))){
+//
+//            SmsManager sms = SmsManager.getDefault();
+//            ArrayList<String> emerMsg;
+//            emerMsg = sms.divideMessage(emergencySos);
+//            if( bgPhone1.length() == 13) {
+//                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
+//            }
+//            if( bgPhone2.length() == 13) {
+//
+//                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
+//            }
+//            Toast.makeText(this,"Sending message",Toast.LENGTH_LONG).show();
+//
+////        sosAlert();
+//
+////        if (!(cityName.equals(preCityName))) {
+////            String[] phNos = {MyGlobalClass.phoneNumber1, MyGlobalClass.phoneNumber2};
+////            MyGlobalClass glbclsobj = new MyGlobalClass();
+////            glbclsobj.sendSMS(phNos, emergencySos);
+////
+////            preCityName = cityName;
+////        }
+//
+//
+//    }
 
-
-
-     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-
-        bgPhone1 = MyGlobalClass.phoneNumber1;
-        bgPhone2 = MyGlobalClass.phoneNumber2;
-        if (!(cityName.equals(preCityName))){
-
-            SmsManager sms = SmsManager.getDefault();
-            ArrayList<String> emerMsg;
-            emerMsg = sms.divideMessage(emergencySos);
-            if( bgPhone1.length() == 13) {
-                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
-            }
-            if( bgPhone2.length() == 13) {
-
-                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
-            }
-            Toast.makeText(this,"Sending message",Toast.LENGTH_LONG).show();
-            preCityName = cityName;
-            bgPhone1 = null;
-            bgPhone2 = null;
-        }
-
-
-
-
-
-    }
+//    public void sosAlert(){
+//
+//
+//
+//     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
+//
+//        bgPhone1 = MyGlobalClass.phoneNumber1;
+//        bgPhone2 = MyGlobalClass.phoneNumber2;
+//        if (!(cityName.equals(preCityName))){
+//
+//            SmsManager sms = SmsManager.getDefault();
+//            ArrayList<String> emerMsg;
+//            emerMsg = sms.divideMessage(emergencySos);
+//            if( bgPhone1.length() == 13) {
+//                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
+//            }
+//            if( bgPhone2.length() == 13) {
+//
+//                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
+//            }
+//            preCityName = cityName;
+//            bgPhone1 = null;
+//            bgPhone2 = null;
+//        }
+//
+//
+//
+//
+//
+//    }
 
 
    /* @Override
