@@ -18,8 +18,10 @@ public class MyGlobalClass extends AppCompatActivity {
         for (int i = 0; i < ph.length; i++) {
             if (ph[i].length() == 13) {
                 sms.sendMultipartTextMessage(ph[i], null, emerMsg, null, null);
+
             }
         }
+
     }
 
 

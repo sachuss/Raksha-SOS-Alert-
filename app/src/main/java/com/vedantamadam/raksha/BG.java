@@ -19,8 +19,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Address;
-import android.location.Geocoder;
+
+
 import android.location.Location;
 
 import android.location.LocationManager;
@@ -46,8 +46,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+
 import java.util.Objects;
 
 
@@ -55,8 +54,7 @@ import java.util.Objects;
 public class BG extends Service implements ComponentCallbacks2 {
 
 
-   // private Timer timer;
-   // private TimerTask timerTask;
+
     public int counter=0;
 
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -66,21 +64,19 @@ public class BG extends Service implements ComponentCallbacks2 {
     private float mAccel;
     private float mAccelCurrent;
     private float mAccelLast;
-    String bgPhone1, bgPhone2, emergencySos="";
+    String  emergencySos="";
 
     SharedPreferences sharedPrefPhone;
 
     private LocationRequest mLocationRequest;
     LocationManager service;
     Location mLocation;
- //   private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
- //   private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
     boolean enabled;
-    List<Address> addresses;
-    Geocoder geocoder;
 
 
-    String cityName = "",preCityName="";
+
+    String cityNameLat="", cityNameLon="", preCityNameLat="", preCityNameLon="";
     float x,y,z,delta;
     int senValue;
 
@@ -106,16 +102,11 @@ public class BG extends Service implements ComponentCallbacks2 {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        geocoder = new Geocoder(this, Locale.getDefault());
 
-
-
-
-      // startLocationUpdates();
         if(MyGlobalClass.phoneNumber1.length() == 0)
         {
             loadBgData();
-            //    updateDa();
+
 
         }
 
@@ -148,11 +139,6 @@ public void loadBgData()
 
 
 
-      //  startLocationUpdates();
-
-        //   onTaskRemoved(intent);
-
-       // startTimer();
 
         String input = intent.getStringExtra("inputExtra");
         createNotificationChannel();
@@ -198,19 +184,12 @@ public void loadBgData()
     }
 
 
-   /* public void onTaskRemoved(Intent rootIntent) {
 
-
-        Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
-        restartServiceIntent.setPackage(getPackageName());
-        startService(restartServiceIntent);
-        super.onTaskRemoved(rootIntent);
-    }*/
 
        @Override
        public void onDestroy(){
            super.onDestroy();
-           //stoptimertask();
+
 
           /* Intent broadcastIntent = new Intent();
            broadcastIntent.setAction("restartservice");
@@ -222,22 +201,7 @@ public void loadBgData()
 
        }
 
-  /*  public void startTimer() {
-        timer = new Timer();
-        timerTask = new TimerTask() {
-            public void run() {
-                Log.i("Count", "=========  "+ (counter++));
-            }
-        };
-        timer.schedule(timerTask, 1000, 1000); //
-    }*/
 
-  /*  public void stoptimertask() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }*/
 
 
     private final SensorEventListener mSensorListener = new SensorEventListener() {
@@ -255,17 +219,17 @@ public void loadBgData()
             mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
             delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta;
-            //mAccel > 38 (used value)
+
              senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
-                int offset = 9;
+             int offset = 0;
 //                offset = 4; //Use when testing
 
 
-//                if (mAccel > (senValue)) {
-            if (mAccel > (senValue + offset )) {
-                    startLocationUpdates();
 
-                    Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_SHORT).show();
+            if (mAccel > (senValue + offset )) {
+                     startLocationUpdates();
+
+                     Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -331,21 +295,29 @@ public void loadBgData()
                         emergencySos =
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
-                       // Toast.makeText(getApplicationContext(),emergencySos,Toast.LENGTH_LONG).show();
-                        try {
-                            addresses = geocoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
+                        cityNameLat = String.valueOf(mLocation.getLatitude());
+                        cityNameLon = String.valueOf(mLocation.getLongitude());
+                       
+
+
+
+                      if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+                          Toast.makeText(getApplicationContext(),"Location not changed...",Toast.LENGTH_SHORT).show();
+                      }
+                      else{
+
+
+                                 String[] phNos = {MyGlobalClass.phoneNumber1, MyGlobalClass.phoneNumber2};
+                                 MyGlobalClass glbclsobj = new MyGlobalClass();
+                                  glbclsobj.sendSMS(phNos, emergencySos);
+                                 Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
+                                 preCityNameLat = cityNameLat;
+                                 preCityNameLon = cityNameLon;
+
+
                         }
-                        cityName = addresses.get(0).getAddressLine(0);
-//                        sosAlert();
-                        if (!(cityName.equals(preCityName))) {
-                            String[] phNos = {MyGlobalClass.phoneNumber1, MyGlobalClass.phoneNumber2};
-                            MyGlobalClass glbclsobj = new MyGlobalClass();
-                            glbclsobj.sendSMS(phNos, emergencySos);
-                            preCityName = cityName;
-                        }
-                        //    Toast.makeText(getApplicationContext(),locationResult.getLastLocation().toString(), Toast.LENGTH_LONG).show();
+
 
 
                         try {
@@ -361,92 +333,11 @@ public void loadBgData()
     public void onLocationChanged(Location location) throws IOException {
         // New location has now been determined
 
-
-
-       /* emergencySos =
-                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() +"," + location.getLongitude()
-                        + "&travelmode=driving";
-
-
-
-
-
-
-        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        cityName = addresses.get(0).getAddressLine(0);
-
-
-
-        sosAlert();*/
-
-
     }
 
-//    public void sosAlert(){
-//
-//
-//
-//     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-//
-//        bgPhone1 = MyGlobalClass.phoneNumber1;
-//        bgPhone2 = MyGlobalClass.phoneNumber2;
-//        if (!(cityName.equals(preCityName))){
-//
-//            SmsManager sms = SmsManager.getDefault();
-//            ArrayList<String> emerMsg;
-//            emerMsg = sms.divideMessage(emergencySos);
-//            if( bgPhone1.length() == 13) {
-//                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
-//            }
-//            if( bgPhone2.length() == 13) {
-//
-//                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
-//            }
-//            Toast.makeText(this,"Sending message",Toast.LENGTH_LONG).show();
-//
-////        sosAlert();
-//
-////        if (!(cityName.equals(preCityName))) {
-////            String[] phNos = {MyGlobalClass.phoneNumber1, MyGlobalClass.phoneNumber2};
-////            MyGlobalClass glbclsobj = new MyGlobalClass();
-////            glbclsobj.sendSMS(phNos, emergencySos);
-////
-////            preCityName = cityName;
-////        }
-//
-//
-//    }
 
-//    public void sosAlert(){
-//
-//
-//
-//     //   Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-//
-//        bgPhone1 = MyGlobalClass.phoneNumber1;
-//        bgPhone2 = MyGlobalClass.phoneNumber2;
-//        if (!(cityName.equals(preCityName))){
-//
-//            SmsManager sms = SmsManager.getDefault();
-//            ArrayList<String> emerMsg;
-//            emerMsg = sms.divideMessage(emergencySos);
-//            if( bgPhone1.length() == 13) {
-//                sms.sendMultipartTextMessage(bgPhone1, null, emerMsg, null, null);
-//            }
-//            if( bgPhone2.length() == 13) {
-//
-//                sms.sendMultipartTextMessage(bgPhone2, null, emerMsg, null, null);
-//            }
-//            preCityName = cityName;
-//            bgPhone1 = null;
-//            bgPhone2 = null;
-//        }
-//
-//
-//
-//
-//
-//    }
+
+
 
 
    /* @Override

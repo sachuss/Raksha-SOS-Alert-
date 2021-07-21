@@ -19,8 +19,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 
-import android.location.Address;
-import android.location.Geocoder;
+
 import android.location.Location;
 
 import android.location.LocationManager;
@@ -29,7 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.telephony.SmsManager;
+
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,9 +50,6 @@ import com.google.android.gms.location.SettingsClient;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
@@ -77,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private LocationRequest mLocationRequest;
 
-   // private long UPDATE_INTERVAL = 60 * 1000;  /* 60 secs */
-
-  //  private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
 
     LocationManager service;
@@ -145,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 startLocationUpdates();
 
-                 //   sosMessage();
+
 
 
 
@@ -270,48 +263,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
-
-
-    protected void sosMessage() {
-
-
-
-        phGlobal1 = MyGlobalClass.phoneNumber1;
-        phGlobal2 = MyGlobalClass.phoneNumber2;
-
-        if(phGlobal1.length() > 0 || phGlobal2.length() > 0) {
-
-            SmsManager sms = SmsManager.getDefault();
-            ArrayList<String> messages = null;
-
-            messages = sms.divideMessage(msg);
-
-            if (phGlobal1.length() == 13)
-                sms.sendMultipartTextMessage(phGlobal1, null, messages, null, null);
-
-            if (phGlobal2.length() == 13)
-                sms.sendMultipartTextMessage(phGlobal2, null, messages, null, null);
-
-
-            Toast.makeText(this, "Sending message...", Toast.LENGTH_SHORT).show();
-
-
-            phGlobal1 = null;
-            phGlobal2 = null;
-
-        }
-    else
-        {Toast.makeText(this, "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();}
-
-
-    }
-
-
-
-
-
-
     // Trigger new location updates at interval
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void startLocationUpdates() {
@@ -362,14 +313,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         msg =
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
-                     //  Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG).show();
-//                        sosMessage();
+
                         phGlobal1 = MyGlobalClass.phoneNumber1;
                         phGlobal2 = MyGlobalClass.phoneNumber2;
                         if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
                             String[] phNos = {phGlobal1, phGlobal2};
                             MyGlobalClass glbclsobj = new MyGlobalClass();
                             glbclsobj.sendSMS(phNos, msg);
+                            Toast.makeText(getApplicationContext(),"Sending message...",Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
                         }
@@ -388,38 +339,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onLocationChanged(Location location) throws IOException {
         // New location has now been determined
 
-
-
-      /*  msg =
-                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
-                        + "&travelmode=driving";
-        List<Address> addresses;
-        Geocoder geocoder;
-        String cityName = "";
-        geocoder = new Geocoder(this, Locale.getDefault());
-        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-        cityName = addresses.get(0).getAddressLine(0);
-
-        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();*/
-    //   sosMessage();
-
-//        Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-//
-////        sosMessage();
-//        phGlobal1 = MyGlobalClass.phoneNumber1;
-//        phGlobal2 = MyGlobalClass.phoneNumber2;
-//        if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
-//            String[] phNos = {phGlobal1, phGlobal2};
-//            MyGlobalClass glbclsobj = new MyGlobalClass();
-//            glbclsobj.sendSMS(phNos, msg);
-//        } else {
-//            Toast.makeText(this, "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
-//        }
-
-
-//Toast.makeText(this,"location is" +cityName,Toast.LENGTH_LONG).show();
-
-
     }
 
 
@@ -431,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
 
-   //     startLocationUpdates();
+
         super.onResume();
     }
 
