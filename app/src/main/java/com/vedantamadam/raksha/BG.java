@@ -227,7 +227,11 @@ public void loadBgData()
 
 
             if (mAccel > (senValue + offset )) {
-                     startLocationUpdates();
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("restartservice");
+                broadcastIntent.setClass(getApplicationContext(), MyReceiver.class);
+                getApplicationContext().sendBroadcast(broadcastIntent);
+                  //   startLocationUpdates();
 
                      Toast.makeText(getApplicationContext(), "Shake event detected", Toast.LENGTH_SHORT).show();
 
@@ -248,7 +252,7 @@ public void loadBgData()
 
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+  /*  @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void startLocationUpdates() {
 
         // Create the location request to start receiving updates
@@ -316,6 +320,9 @@ public void loadBgData()
                                  preCityNameLon = cityNameLon;
 
 
+
+
+
                         }
 
 
@@ -334,7 +341,7 @@ public void loadBgData()
         // New location has now been determined
 
     }
-
+*/
 
 
 

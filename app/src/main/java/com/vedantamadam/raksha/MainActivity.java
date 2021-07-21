@@ -12,9 +12,13 @@ import android.Manifest;
 import android.app.ActivityManager;
 
 
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
@@ -24,13 +28,16 @@ import android.location.Location;
 
 import android.location.LocationManager;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.Settings;
 
 
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,11 +57,17 @@ import com.google.android.gms.location.SettingsClient;
 
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
 
     private static final int SMS_LOC_REQUEST_CODE = 100;
+    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5000;
+    private Dialog dialog, prevDialog;
+    int count, i;
+
 
 
 
@@ -68,10 +81,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String phGlobal1, phGlobal2;
     Intent locIntent;
     SharedPreferences sharedPref;
+    String cityNameLat="", cityNameLon="", preCityNameLat="", preCityNameLon="";
 
 
 
     private LocationRequest mLocationRequest;
+
 
 
 
@@ -81,12 +96,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        registerReceiver(broadcastReceiver, new IntentFilter("FALL DETECTED"));
 
 
 
@@ -115,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (!enabled) {
             enableGps();
         }
+
+        if (!Settings.canDrawOverlays(this)){
+        enableDisplayOver();}
+
 
 
         if(MyGlobalClass.phoneNumber1.length() > 0)
@@ -153,14 +175,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-
     }
 
 
 
     public void onDestroy() {
 
-
+        MyGlobalClass.fall = true;
         super.onDestroy();
 
     }
@@ -185,11 +206,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED)
+         {
 
             ActivityCompat.requestPermissions(MainActivity.this, new String[]
                     {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
         }
+
 
 
     }
@@ -228,6 +251,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
 
+
+
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                // You don't have permission
+                enableDisplayOver();
+            } else {
+             ;
+                // Do as per your logic
+            }
+
         }
 
     }
@@ -261,6 +303,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
+    }
+
+    protected void enableDisplayOver()
+    {
+        AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
+        displayOver.setMessage("Please allow Raksha to display over other apps.");
+
+        displayOver.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!Settings.canDrawOverlays(getApplicationContext())) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                    }
+                }
+
+
+            }
+        });
+        displayOver.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+            }
+        });
+        AlertDialog dialog = displayOver.create();
+        dialog.show();
     }
 
     // Trigger new location updates at interval
@@ -309,21 +381,41 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
 
-                        mLocation = locationResult.getLastLocation();
-                        msg =
-                                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
-                                        + "&travelmode=driving";
 
-                        phGlobal1 = MyGlobalClass.phoneNumber1;
-                        phGlobal2 = MyGlobalClass.phoneNumber2;
-                        if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
-                            String[] phNos = {phGlobal1, phGlobal2};
-                            MyGlobalClass glbclsobj = new MyGlobalClass();
-                            glbclsobj.sendSMS(phNos, msg);
-                            Toast.makeText(getApplicationContext(),"Sending message...",Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+
+                mLocation = locationResult.getLastLocation();
+                msg =
+                        "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                                + "&travelmode=driving";
+
+                        cityNameLat = String.valueOf(mLocation.getLatitude());
+                        cityNameLon = String.valueOf(mLocation.getLongitude());
+
+
+                        if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+                            Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
+                            MyGlobalClass.fall = true;
                         }
+                       else {
+
+                            phGlobal1 = MyGlobalClass.phoneNumber1;
+                            phGlobal2 = MyGlobalClass.phoneNumber2;
+                            if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
+                                String[] phNos = {phGlobal1, phGlobal2};
+                                MyGlobalClass glbclsobj = new MyGlobalClass();
+                                glbclsobj.sendSMS(phNos, msg);
+                                MyGlobalClass.fall = true;
+                                Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+                            }
+                            preCityNameLat = cityNameLat;
+                            preCityNameLon = cityNameLon;
+
+                        }
+
+
+
 
                         try {
                             onLocationChanged(locationResult.getLastLocation());
@@ -371,6 +463,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     protected void onStart() {
 
+
+
         super.onStart();
 
 
@@ -412,6 +506,87 @@ public void onNothingSelected(AdapterView<?> adapterView) {
 
         }
 
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //  Toast.makeText(getApplicationContext(),"In main activity",Toast.LENGTH_SHORT).show();
 
+        fallAlertBuild();
+
+            }
+
+    };
+
+    public void fallAlertBuild(){
+
+        if(MyGlobalClass.fall == true) {
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+
+            builder.setMessage("Your device suffered a violent shake.\n" + "Do you want to cancel sending Emergency SOS  ?")
+
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                             /*   Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                                intent1.addCategory(Intent.CATEGORY_HOME);
+                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent1);
+                                Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();*/
+                            MyGlobalClass.fall = true;
+
+
+                            // TODO: Add positive button action code here
+                        }
+                    });
+
+
+            dialog = builder.create();
+
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                private static final int AUTO_DISMISS_MILLIS = 10000;
+
+                @Override
+                public void onShow(final DialogInterface dialog) {
+                    final Button defaultButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    final CharSequence positiveButtonText = defaultButton.getText();
+                    new CountDownTimer(AUTO_DISMISS_MILLIS, 100) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            defaultButton.setText(String.format(
+                                    Locale.getDefault(), "%s (%d)",
+                                    positiveButtonText,
+                                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1 //add one so it never displays zero
+
+                            ));
+                        }
+
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                        @Override
+                        public void onFinish() {
+                            if (((AlertDialog) dialog).isShowing()) {
+                                startLocationUpdates();
+                                dialog.dismiss();
+                            }
+                        }
+                    }.start();
+                }
+            });
+
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+           } else {
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_BASE_APPLICATION);
+           }
+            dialog.show();
+
+
+            MyGlobalClass.fall = false;
+        }
+
+    }
 
 }

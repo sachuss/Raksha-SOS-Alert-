@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class MyGlobalClass extends AppCompatActivity {
     public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "";
+    public static boolean fall = true;
 
     public void sendSMS(String[] ph, String msg) {
         SmsManager sms = SmsManager.getDefault();

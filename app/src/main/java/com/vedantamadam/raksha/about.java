@@ -42,9 +42,11 @@ public class about extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void onDestroy() {
+    public void onStop() {
 
-        super.onDestroy();
+
+
+            super.onStop();
 
 
     }

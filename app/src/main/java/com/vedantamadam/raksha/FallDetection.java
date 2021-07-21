@@ -167,4 +167,10 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+    public void onStop() {
+
+
+        super.onStop();
+
+    }
 }

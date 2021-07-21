@@ -179,6 +179,14 @@ public class SosActivity extends AppCompatActivity  {
 
     }
 
+    public void onStop() {
+
+        super.onStop();
+   
+
+
+    }
+
 
 
 
