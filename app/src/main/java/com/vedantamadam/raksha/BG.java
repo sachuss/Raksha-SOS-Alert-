@@ -111,13 +111,13 @@ public class BG extends Service implements ComponentCallbacks2 {
         }
 
 
-        sharedPrefPhone = getSharedPreferences("bgbook", MODE_PRIVATE);
-        SharedPreferences.Editor edi = sharedPrefPhone.edit();
-        edi.putString("b1", MyGlobalClass.phoneNumber1);
-        edi.putString("b2", MyGlobalClass.phoneNumber2);
-
-
-        edi.apply();
+//        sharedPrefPhone = getSharedPreferences("bgbook", MODE_PRIVATE);
+//        SharedPreferences.Editor edi = sharedPrefPhone.edit();
+//        edi.putString("b1", MyGlobalClass.phoneNumber1);
+//        edi.putString("b2", MyGlobalClass.phoneNumber2);
+//
+//
+//        edi.apply();
 
 
 
@@ -127,9 +127,11 @@ public class BG extends Service implements ComponentCallbacks2 {
 public void loadBgData()
 {
 
-    sharedPrefPhone = getSharedPreferences("bgbook",MODE_PRIVATE);
-    MyGlobalClass.phoneNumber1= sharedPrefPhone.getString("b1","");
-    MyGlobalClass.phoneNumber2 = sharedPrefPhone.getString("b2","");
+//    sharedPrefPhone = getSharedPreferences("bgbook",MODE_PRIVATE);
+//    MyGlobalClass.phoneNumber1= sharedPrefPhone.getString("b1","");
+//    MyGlobalClass.phoneNumber2 = sharedPrefPhone.getString("b2","");
+    MyGlobalClass.phoneNumber1= MyGlobalClass.read_pref(getApplicationContext(),"e1");
+    MyGlobalClass.phoneNumber2 = MyGlobalClass.read_pref(getApplicationContext(),"e2");
 
 
 }

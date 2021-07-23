@@ -139,15 +139,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-        if(MyGlobalClass.phoneNumber1.length() > 0)
-        {
-        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
-        SharedPreferences.Editor edi = sharedPref.edit();
-        edi.putString("g1", MyGlobalClass.phoneNumber1);
-        edi.putString("g2", MyGlobalClass.phoneNumber2);
-
-        edi.apply();
-        }
+//        if(MyGlobalClass.phoneNumber1.length() > 0)
+//        {
+//        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
+//        SharedPreferences.Editor edi = sharedPref.edit();
+//        edi.putString("g1", MyGlobalClass.phoneNumber1);
+//        edi.putString("g2", MyGlobalClass.phoneNumber2);
+//
+//        edi.apply();
+//        }
 
         if(MyGlobalClass.phoneNumber1.length() == 0)
         {loadDa();}
@@ -189,9 +189,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void loadDa() {
 
 
-        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
-        MyGlobalClass.phoneNumber1 = sharedPref.getString("g1", "");
-        MyGlobalClass.phoneNumber2 = sharedPref.getString("g2", "");
+//        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
+//        MyGlobalClass.phoneNumber1 = sharedPref.getString("g1", "");
+//        MyGlobalClass.phoneNumber2 = sharedPref.getString("g2", "");
+        MyGlobalClass.phoneNumber1 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
+        MyGlobalClass.phoneNumber2 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
 
 
 

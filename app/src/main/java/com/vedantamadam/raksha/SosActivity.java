@@ -70,16 +70,20 @@ public class SosActivity extends AppCompatActivity  {
 
 
 
-                        sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
-                        SharedPreferences.Editor edito = sharedPreferences.edit();
-                        edito.putString("e1", emergencyNo1.getText().toString());
-                        edito.putString("e2", emergencyNo2.getText().toString());
+//                        sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
+//                        SharedPreferences.Editor edito = sharedPreferences.edit();
+//                        edito.putString("e1", emergencyNo1.getText().toString());
+//                        edito.putString("e2", emergencyNo2.getText().toString());
+//
+//                    edito.apply();
 
-                    edito.apply();
+                    MyGlobalClass.save_pref(getApplicationContext(),"e1",emergencyNo1.getText().toString());
+                    MyGlobalClass.save_pref(getApplicationContext(),"e2",emergencyNo2.getText().toString());
 
 
 
-                        appendedPh1 = ("+91" + emergencyNo1.getText().toString());
+
+                    appendedPh1 = ("+91" + emergencyNo1.getText().toString());
                         MyGlobalClass.phoneNumber1 = appendedPh1;
 
 
@@ -106,9 +110,14 @@ public class SosActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if((emergencyNo1.getText().length() != 0) || (emergencyNo2.getText().length() != 0) ) {
-                    sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
-                    SharedPreferences.Editor edito = sharedPreferences.edit();
-                    edito.clear().commit();
+//                    sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
+//                    SharedPreferences.Editor edito = sharedPreferences.edit();
+//                    edito.clear().commit();
+
+                    MyGlobalClass.delete_pref(getApplicationContext(),"e1");
+                    MyGlobalClass.delete_pref(getApplicationContext(),"e2");
+
+
 
                     emergencyNo1.getText().clear();
                     emergencyNo2.getText().clear();
@@ -135,10 +144,12 @@ public class SosActivity extends AppCompatActivity  {
     {
 
 
-        sharedPreferences = getSharedPreferences("emergencybook",MODE_PRIVATE);
-        phoneN1 = sharedPreferences.getString("e1","");
-        phoneN2 = sharedPreferences.getString("e2","");
+//        sharedPreferences = getSharedPreferences("emergencybook",MODE_PRIVATE);
+//        phoneN1 = sharedPreferences.getString("e1","");
+//        phoneN2 = sharedPreferences.getString("e2","");
 
+        phoneN1 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
+        phoneN2 = MyGlobalClass.read_pref(getApplicationContext(),"e2");
 
     }
 
