@@ -157,10 +157,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                startLocationUpdates();
-
-
+             //   if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
+               // {
+                    startLocationUpdates();
+                //}
+              //  else
+          //      {
+          //          enableGps();
+          //      }
 
 
 
@@ -364,7 +368,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         settingsClient.checkLocationSettings(locationSettingsRequest);
         //  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+
+
 
 
             // TODO: Consider calling
@@ -374,6 +380,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},SMS_LOC_REQUEST_CODE);
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
@@ -392,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         cityNameLon = String.valueOf(mLocation.getLongitude());
 
 
-                        if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+              /*          if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
                             Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         }
@@ -412,7 +420,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             preCityNameLat = cityNameLat;
                             preCityNameLon = cityNameLon;
 
+                        }*/
+                        phGlobal1 = MyGlobalClass.phoneNumber1;
+                        phGlobal2 = MyGlobalClass.phoneNumber2;
+                        if (phGlobal1.length() > 0 && phGlobal2.length() > 0){
+                                    if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon)))
+                                        {
+                                        Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
+                                        MyGlobalClass.fall = true;
+                                        }
+                                    else{
+
+                                        String[] phNos = {phGlobal1, phGlobal2};
+                                        MyGlobalClass glbclsobj = new MyGlobalClass();
+                                        glbclsobj.sendSMS(phNos, msg);
+                                        Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
+                                        MyGlobalClass.fall = true;
+                                        }
                         }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+                            MyGlobalClass.fall = true;
+                        }
+
 
 
 
@@ -568,8 +599,11 @@ public void onNothingSelected(AdapterView<?> adapterView) {
                         @Override
                         public void onFinish() {
                             if (((AlertDialog) dialog).isShowing()) {
+                              //  if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
                                 startLocationUpdates();
-                                dialog.dismiss();
+                              //  else
+                               // {enableGps();}
+                              //  dialog.dismiss();
                             }
                         }
                     }.start();
