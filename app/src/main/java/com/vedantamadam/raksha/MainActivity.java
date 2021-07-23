@@ -157,14 +157,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
-               // {
+             if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
+               {
                     startLocationUpdates();
-                //}
-              //  else
-          //      {
-          //          enableGps();
-          //      }
+                }
+                else
+                {
+                    enableGps();
+                }
 
 
 
