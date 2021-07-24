@@ -1,52 +1,37 @@
 package com.vedantamadam.raksha;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-
 import android.app.ActivityManager;
-
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-
-
-
 import android.location.Location;
-
 import android.location.LocationManager;
-
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.Settings;
-
-
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-
-
 import android.widget.Spinner;
-
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -55,47 +40,38 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
-
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final int SMS_LOC_REQUEST_CODE = 100;
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5000;
-    private Dialog dialog, prevDialog;
     int count, i;
-
-
-
-
-
-
-
     String msg;
-
     Button sosBut;
-
     String phGlobal1, phGlobal2;
     Intent locIntent;
     SharedPreferences sharedPref;
-    String cityNameLat="", cityNameLon="", preCityNameLat="", preCityNameLon="";
-
-
-
-    private LocationRequest mLocationRequest;
-
-
-
-
+    String cityNameLat = "", cityNameLon = "", preCityNameLat = "", preCityNameLon = "";
     LocationManager service;
     Location mLocation;
     boolean enabled;
+    private Dialog dialog, prevDialog;
+    private LocationRequest mLocationRequest;
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //  Toast.makeText(getApplicationContext(),"In main activity",Toast.LENGTH_SHORT).show();
 
+            fallAlertBuild();
 
+        }
 
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -107,22 +83,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         registerReceiver(broadcastReceiver, new IntentFilter("FALL DETECTED"));
 
 
+        sosBut = findViewById(R.id.sosButton);
+        Spinner sosSpin = findViewById(R.id.spinner);
 
 
-        sosBut = (Button) findViewById(R.id.sosButton);
-        Spinner sosSpin = (Spinner) findViewById(R.id.spinner);
-
-
-
-
-        sosSpin.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        sosSpin.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> dataAdaptor = ArrayAdapter.createFromResource(this, R.array.spinnerItems, R.layout.support_simple_spinner_dropdown_item);
         dataAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sosSpin.setAdapter(dataAdaptor);
-
-
-
-
 
 
         checkPermission();
@@ -134,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             enableGps();
         }
 
-        if (!Settings.canDrawOverlays(this)){
-        enableDisplayOver();}
-
+        if (!Settings.canDrawOverlays(this)) {
+            enableDisplayOver();
+        }
 
 
 //        if(MyGlobalClass.phoneNumber1.length() > 0)
@@ -149,39 +117,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        edi.apply();
 //        }
 
-        if(MyGlobalClass.phoneNumber1.length() == 0)
-        {loadDa();}
-
+        if (MyGlobalClass.phoneNumber1.length() == 0) {
+            loadDa();
+        }
 
 
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
-               // {
+                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
                     startLocationUpdates();
-                //}
-              //  else
-          //      {
-          //          enableGps();
-          //      }
-
-
-
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
 
-
-
-
-
-
-
-
     }
-
-
 
     public void onDestroy() {
 
@@ -196,29 +149,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
 //        MyGlobalClass.phoneNumber1 = sharedPref.getString("g1", "");
 //        MyGlobalClass.phoneNumber2 = sharedPref.getString("g2", "");
-        MyGlobalClass.phoneNumber1 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
-        MyGlobalClass.phoneNumber2 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
-
-
+        MyGlobalClass.phoneNumber1 = MyGlobalClass.read_pref(getApplicationContext(), "e1");
+        MyGlobalClass.phoneNumber2 = MyGlobalClass.read_pref(getApplicationContext(), "e1");
 
 
     }
-
-
-
-
 
     // Function to check and request permission.
     public void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED)
-         {
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
 
             ActivityCompat.requestPermissions(MainActivity.this, new String[]
                     {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
         }
-
 
 
     }
@@ -257,8 +202,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
 
-
-
         }
 
     }
@@ -272,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 // You don't have permission
                 enableDisplayOver();
             } else {
-             ;
                 // Do as per your logic
             }
 
@@ -307,12 +249,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dialog.show();
 
 
-
-
     }
 
-    protected void enableDisplayOver()
-    {
+    protected void enableDisplayOver() {
         AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
         displayOver.setMessage("Please allow Raksha to display over other apps.");
 
@@ -348,11 +287,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-      //  mLocationRequest.setInterval(UPDATE_INTERVAL);
-     //   mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        //  mLocationRequest.setInterval(UPDATE_INTERVAL);
+        //   mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
         mLocationRequest.setNumUpdates(1);
-
 
 
         service = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -370,85 +308,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         settingsClient.checkLocationSettings(locationSettingsRequest);
         //  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-
-
-
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},SMS_LOC_REQUEST_CODE);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-
-
-
-                mLocation = locationResult.getLastLocation();
-                msg =
-                        "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
-                                + "&travelmode=driving";
+                        mLocation = locationResult.getLastLocation();
+                        msg =
+                                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                                        + "&travelmode=driving";
 
                         cityNameLat = String.valueOf(mLocation.getLatitude());
                         cityNameLon = String.valueOf(mLocation.getLongitude());
-
-
-              /*          if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-                            Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
-                            MyGlobalClass.fall = true;
-                        }
-                       else {
-
-                            phGlobal1 = MyGlobalClass.phoneNumber1;
-                            phGlobal2 = MyGlobalClass.phoneNumber2;
-                            if (phGlobal1.length() > 0 && phGlobal2.length() > 0) {
-                                String[] phNos = {phGlobal1, phGlobal2};
-                                MyGlobalClass glbclsobj = new MyGlobalClass();
-                                glbclsobj.sendSMS(phNos, msg);
-                                MyGlobalClass.fall = true;
-                                Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
-                            }
-                            preCityNameLat = cityNameLat;
-                            preCityNameLon = cityNameLon;
-
-                        }*/
                         phGlobal1 = MyGlobalClass.phoneNumber1;
                         phGlobal2 = MyGlobalClass.phoneNumber2;
-                        if (phGlobal1.length() > 0 && phGlobal2.length() > 0){
-                                    if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon)))
-                                        {
-                                        Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
-                                        MyGlobalClass.fall = true;
-                                        }
-                                    else{
+                        if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+                            Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+                            MyGlobalClass.fall = true;
+                        } else {
 
-                                        String[] phNos = {phGlobal1, phGlobal2};
-                                        MyGlobalClass glbclsobj = new MyGlobalClass();
-                                        glbclsobj.sendSMS(phNos, msg);
-                                        Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
-                                        MyGlobalClass.fall = true;
-                                        }
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+                            String[] phNos = {phGlobal1, phGlobal2};
+                            MyGlobalClass glbclsobj = new MyGlobalClass();
+                            glbclsobj.sendSMS(phNos, msg);
+                            Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         }
-
-
-
-
 
                         try {
                             onLocationChanged(locationResult.getLastLocation());
@@ -466,11 +353,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
-
-
-
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
@@ -483,9 +365,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onPause() {
 
 
-
         super.onPause();
     }
+
     protected void onStop() {
 
 
@@ -497,63 +379,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onStart() {
 
 
-
         super.onStart();
-
 
 
     }
 
-
-
-
-
-
-@Override
-public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         String item = adapterView.getItemAtPosition(i).toString();
-        switch(item){
-        case "Home":
-        break;
-        case "Instructions":
-        Intent intent = new Intent(MainActivity.this,about.class);
-        startActivity(intent);
-        break;
-        case "SOS":
-        Intent intent1 = new Intent(MainActivity.this,SosActivity.class);
-        startActivity(intent1);
-        break;
+        switch (item) {
+            case "Home":
+                break;
+            case "Instructions":
+                Intent intent = new Intent(MainActivity.this, about.class);
+                startActivity(intent);
+                break;
+            case "SOS":
+                Intent intent1 = new Intent(MainActivity.this, SosActivity.class);
+                startActivity(intent1);
+                break;
             case "Fall Detection":
-                Intent intent2 = new Intent(MainActivity.this,FallDetection.class);
+                Intent intent2 = new Intent(MainActivity.this, FallDetection.class);
                 startActivity(intent2);
                 break;
 
         }
 
 
-        }
+    }
 
-@Override
-public void onNothingSelected(AdapterView<?> adapterView) {
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-        }
+    }
 
-    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //  Toast.makeText(getApplicationContext(),"In main activity",Toast.LENGTH_SHORT).show();
+    public void fallAlertBuild() {
 
-        fallAlertBuild();
-
-            }
-
-    };
-
-    public void fallAlertBuild(){
-
-        if(MyGlobalClass.fall == true) {
+        if (MyGlobalClass.fall == true) {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert);
@@ -601,22 +464,22 @@ public void onNothingSelected(AdapterView<?> adapterView) {
                         @Override
                         public void onFinish() {
                             if (((AlertDialog) dialog).isShowing()) {
-                              //  if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                                startLocationUpdates();
-                              //  else
-                               // {enableGps();}
-                              //  dialog.dismiss();
+                                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
+                                    startLocationUpdates();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     }.start();
                 }
             });
 
-           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-           } else {
+            } else {
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_BASE_APPLICATION);
-           }
+            }
             dialog.show();
 
 
