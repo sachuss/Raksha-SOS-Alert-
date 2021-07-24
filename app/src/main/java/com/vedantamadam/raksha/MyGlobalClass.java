@@ -50,7 +50,7 @@ public class MyGlobalClass {
         emerMsg = sms.divideMessage(msg);
         if (if_sosnumber_exist(context)) {
             String[] ph = {read_pref(context,"e1"),read_pref(context,"e2")};
-            for (int i = 0; i < ph.length; i++) {
+            for (int i = 0; i < ph.length && !ph[i].isEmpty(); i++) {
                     sms.sendMultipartTextMessage(ph[i], null, emerMsg, null, null);
             }
         } else {
