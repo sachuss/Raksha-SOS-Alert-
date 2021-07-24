@@ -106,29 +106,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             enableDisplayOver();
         }
 
-
-//        if(MyGlobalClass.phoneNumber1.length() > 0)
-//        {
-//        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
-//        SharedPreferences.Editor edi = sharedPref.edit();
-//        edi.putString("g1", MyGlobalClass.phoneNumber1);
-//        edi.putString("g2", MyGlobalClass.phoneNumber2);
-//
-//        edi.apply();
-//        }
-
-        if (MyGlobalClass.phoneNumber1.length() == 0) {
-            loadDa();
-        }
-
-
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
                     startLocationUpdates();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -140,18 +124,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         MyGlobalClass.fall = true;
         super.onDestroy();
-
-    }
-
-    public void loadDa() {
-
-
-//        sharedPref = getSharedPreferences("globalbook", MODE_PRIVATE);
-//        MyGlobalClass.phoneNumber1 = sharedPref.getString("g1", "");
-//        MyGlobalClass.phoneNumber2 = sharedPref.getString("g2", "");
-        MyGlobalClass.phoneNumber1 = MyGlobalClass.read_pref(getApplicationContext(), "e1");
-        MyGlobalClass.phoneNumber2 = MyGlobalClass.read_pref(getApplicationContext(), "e1");
-
 
     }
 
@@ -323,16 +295,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                         cityNameLat = String.valueOf(mLocation.getLatitude());
                         cityNameLon = String.valueOf(mLocation.getLongitude());
-                        phGlobal1 = MyGlobalClass.phoneNumber1;
-                        phGlobal2 = MyGlobalClass.phoneNumber2;
                         if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
                             Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         } else {
 
-                            String[] phNos = {phGlobal1, phGlobal2};
                             MyGlobalClass glbclsobj = new MyGlobalClass();
-                            glbclsobj.sendSMS(phNos, msg);
+                            glbclsobj.sendSMS(getApplicationContext(),msg);
                             Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         }
