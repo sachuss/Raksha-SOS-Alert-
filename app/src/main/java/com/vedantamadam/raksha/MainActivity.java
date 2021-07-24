@@ -45,7 +45,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
-
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final int SMS_LOC_REQUEST_CODE = 100;
@@ -126,12 +125,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext()))
-                {
+                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
                     startLocationUpdates();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"Please set sos phone numbers",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -311,15 +308,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         settingsClient.checkLocationSettings(locationSettingsRequest);
         //  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},SMS_LOC_REQUEST_CODE);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
             return;
         }
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
-                       mLocation = locationResult.getLastLocation();
+                        mLocation = locationResult.getLastLocation();
                         msg =
                                 "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
                                         + "&travelmode=driving";
@@ -328,26 +325,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         cityNameLon = String.valueOf(mLocation.getLongitude());
                         phGlobal1 = MyGlobalClass.phoneNumber1;
                         phGlobal2 = MyGlobalClass.phoneNumber2;
-                        if (phGlobal1.length() > 0 && phGlobal2.length() > 0){
-                                    if((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon)))
-                                        {
-                                        Toast.makeText(getApplicationContext(),"Location same as the previous send location...",Toast.LENGTH_SHORT).show();
-                                        MyGlobalClass.fall = true;
-                                        }
-                                    else{
+                        if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+                            Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+                            MyGlobalClass.fall = true;
+                        } else {
 
-                                        String[] phNos = {phGlobal1, phGlobal2};
-                                        MyGlobalClass glbclsobj = new MyGlobalClass();
-                                        glbclsobj.sendSMS(phNos, msg);
-                                        Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
-                                        MyGlobalClass.fall = true;
-                                        }
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(), "Please enter SOS numbers in SOS page", Toast.LENGTH_SHORT).show();
+                            String[] phNos = {phGlobal1, phGlobal2};
+                            MyGlobalClass glbclsobj = new MyGlobalClass();
+                            glbclsobj.sendSMS(phNos, msg);
+                            Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         }
+
                         try {
                             onLocationChanged(locationResult.getLastLocation());
                         } catch (IOException e) {
@@ -475,11 +464,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         @Override
                         public void onFinish() {
                             if (((AlertDialog) dialog).isShowing()) {
-                              //  if(service.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                                startLocationUpdates();
-                              //  else
-                               // {enableGps();}
-                              //  dialog.dismiss();
+                                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
+                                    startLocationUpdates();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     }.start();
