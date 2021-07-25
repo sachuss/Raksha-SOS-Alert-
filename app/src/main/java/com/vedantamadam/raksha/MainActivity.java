@@ -21,6 +21,8 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -116,6 +118,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*Button shake animation*/
+                Animation shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_shake);
+                view.startAnimation(shake);
+                /*Button shake animation*/
+
+
                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
                     //startLocationUpdates();
 
