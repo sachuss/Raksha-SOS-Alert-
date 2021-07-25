@@ -14,6 +14,8 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +25,6 @@ public class SosActivity extends AppCompatActivity  {
     Toolbar toolbarSos;
     EditText emergencyNo1, emergencyNo2;
     Button saveBut,clearBut;
-    SharedPreferences sharedPreferences;
     private String phoneN1, phoneN2;
     public  String appendedPh1,appendedPh2;
     LocationManager servic;
@@ -36,7 +37,6 @@ public class SosActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_sos);
          emergencyNo1 = (EditText) findViewById(R.id.sos1);
          emergencyNo2 = (EditText)  findViewById(R.id.sos2);
-
          saveBut = (Button)  findViewById(R.id.save);
          clearBut = (Button) findViewById(R.id.butClear);
 
@@ -62,47 +62,38 @@ public class SosActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
 
+                //Delete existing SOS contact number before a new save.
+                //This will be helpful to prevent persisting old values when one of the sos contact number needs to deleted.
+                MyGlobalClass.delete_pref(getApplicationContext(),"e1");
+                MyGlobalClass.delete_pref(getApplicationContext(),"e2");
 
+                String ph1 = PhoneNumberUtils.formatNumberToE164(emergencyNo1.getText().toString(), "IN");
+                String ph2 = PhoneNumberUtils.formatNumberToE164(emergencyNo2.getText().toString(), "IN");
+                boolean goodph = false;
 
-                if((emergencyNo1.getText().length()  == 10) || (emergencyNo2.getText().length()  == 10))   {
+                if ((ph1 == null || ph1.isEmpty()) && (ph2 == null || ph2.isEmpty())) {
+                    // If there is no valid mobile no. entered or both the phonenumber edittext are empty
+                    Toast.makeText(getApplicationContext(), "Please enter atleat one valid SOS contact number.", Toast.LENGTH_SHORT).show();
+                } else if (emergencyNo1.getText().length()!=0 && ph1 == null){
+                    //Invalid mobile no. is entered in emergencyNo1
+                    Toast.makeText(getApplicationContext(), "Please enter valid SOS contact number.", Toast.LENGTH_SHORT).show();
+                    emergencyNo1.getText().clear();
+                } else if (emergencyNo2.getText().length()!=0 && ph2 == null){
+                    //Invalid mobile no. is entered in emergencyNo2
+                    Toast.makeText(getApplicationContext(), "Please enter valid SOS contact number.", Toast.LENGTH_SHORT).show();
+                    emergencyNo2.getText().clear();
+                } else { // All the entered SOS contact number. Going to save
+                    if (ph1 != null) {
+                        MyGlobalClass.save_pref(getApplicationContext(), "e1", ph1);
+                    }
+                    if (ph2 != null) {
+                        MyGlobalClass.save_pref(getApplicationContext(), "e2", ph2);
+                    }
 
-
-
-
-
-//                        sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
-//                        SharedPreferences.Editor edito = sharedPreferences.edit();
-//                        edito.putString("e1", emergencyNo1.getText().toString());
-//                        edito.putString("e2", emergencyNo2.getText().toString());
-//
-//                    edito.apply();
-
-                    MyGlobalClass.save_pref(getApplicationContext(),"e1",emergencyNo1.getText().toString());
-                    MyGlobalClass.save_pref(getApplicationContext(),"e2",emergencyNo2.getText().toString());
-
-
-
-
-                    appendedPh1 = ("+91" + emergencyNo1.getText().toString());
-                        MyGlobalClass.phoneNumber1 = appendedPh1;
-
-
-                        appendedPh2 = ("+91" + emergencyNo2.getText().toString());
-                        MyGlobalClass.phoneNumber2 = appendedPh2;
-
-
-
-                    Toast.makeText(getApplicationContext(),"Saving data...",Toast.LENGTH_LONG).show();
-
-                    Intent sosIntent = new Intent(SosActivity.this,MainActivity.class);
+                    Toast.makeText(getApplicationContext(), "Successfully saved SOS contact numbers.", Toast.LENGTH_LONG).show();
+                    Intent sosIntent = new Intent(SosActivity.this, MainActivity.class);
                     startActivity(sosIntent);
-
-
-
                 }
-
-                else
-                { Toast.makeText(getApplicationContext(),"Please enter two phone numbers or Check for number of digits",Toast.LENGTH_SHORT).show();}
             }
         });
 

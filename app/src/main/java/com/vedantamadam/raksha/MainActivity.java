@@ -376,7 +376,6 @@ public void startLocUpdates()
 
                             MyGlobalClass glbclsobj = new MyGlobalClass();
                             glbclsobj.sendSMS(getApplicationContext(),msg);
-                            Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
                             MyGlobalClass.fall = true;
                         }
 

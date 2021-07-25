@@ -54,7 +54,7 @@
                 android:layout_marginLeft="10dp"
                 android:ems="10"
                 android:inputType="phone"
-                android:maxLength="10"
+                android:maxLength="15"
                 android:nextFocusDown="@id/sos2"
                 android:textColor="@android:color/white" />
 
@@ -88,7 +88,7 @@
                 android:layout_marginLeft="10dp"
                 android:ems="10"
                 android:inputType="phone"
-                android:maxLength="10"
+                android:maxLength="15"
                 android:nextFocusDown="@id/save"
                 android:textColor="@android:color/white" />
 
