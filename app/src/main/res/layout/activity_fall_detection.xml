@@ -16,6 +16,9 @@
         android:background="@color/common_google_signin_btn_text_dark_focused"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@id/guideline9"
+
+        app:layout_constraintTop_toBottomOf="@id/guideline10"
 
 
         app:navigationIcon="@android:drawable/ic_menu_revert"
@@ -94,13 +97,13 @@
         android:ems="10"
 
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:typeface="monospace"
         android:justificationMode="inter_word"
         android:text="Please set your Fall detection sensitivity value from 10 to 100.\nValue 10 - High Sensitivity\ni.e. auto SOS initiates at very small shakes/fall.
         \nValue 100 means Low Sensitivity.\ni.e. auto SOS initiates at very violent shakes/fall."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/holo_blue_bright"
         android:textSize="12sp"
+        android:typeface="monospace"
         app:layout_constraintBottom_toTopOf="@id/guideline12"
 
         app:layout_constraintTop_toBottomOf="@id/textView4" />
@@ -154,6 +157,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
