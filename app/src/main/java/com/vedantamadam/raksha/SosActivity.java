@@ -67,7 +67,7 @@ public class SosActivity extends AppCompatActivity  {
                 MyGlobalClass.delete_pref(getApplicationContext(),"e1");
                 MyGlobalClass.delete_pref(getApplicationContext(),"e2");
 
-                String ph1 = PhoneNumberUtils.formatNumberToE164(emergencyNo1.getText().toString(), "IN");
+                String ph1 = PhoneNumberUtils.formatNumberToE164(emergencyNo1.getText().toString(), 
                 String ph2 = PhoneNumberUtils.formatNumberToE164(emergencyNo2.getText().toString(), "IN");
                 boolean goodph = false;
 
