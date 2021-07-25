@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -58,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String cityNameLat = "", cityNameLon = "", preCityNameLat = "", preCityNameLon = "";
     LocationManager service;
     Location mLocation;
+
+    //New Location Manager & Listener for testing purpose
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+
     boolean enabled;
     private Dialog dialog, prevDialog;
     private LocationRequest mLocationRequest;
@@ -110,7 +117,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
-                    startLocationUpdates();
+                    //startLocationUpdates();
+
+                    /*New Location Updates for Testing Purposes*/
+                    startLocUpdates();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
                 }
@@ -118,7 +128,62 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
+        /*New Location Listener for Testing Purposes*/
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+
+
+
+
+                msg =
+                        "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
+                                + "&travelmode=driving";
+               // Toast.makeText(getApplicationContext(),"NetLoc is:" +msg,Toast.LENGTH_LONG).show();
+
+                cityNameLat = String.valueOf(location.getLatitude());
+                cityNameLon = String.valueOf(location.getLongitude());
+                if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+                    Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+                    locationManager.removeUpdates(locationListener);
+                    MyGlobalClass.fall = true;
+                } else {
+
+                    MyGlobalClass glbclsobj = new MyGlobalClass();
+                    glbclsobj.sendSMS(getApplicationContext(),msg);
+                    Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
+                    locationManager.removeUpdates(locationListener);
+                    MyGlobalClass.fall = true;
+                }
+
+
+
+            }
+        };
+
+
     }
+
+
+ /*New Location Updates for Testing Purposes*/
+public void startLocUpdates()
+{
+    locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return;
+    }
+    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
+   // Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER );
+    MyGlobalClass.fall = true;
+
+}
 
     public void onDestroy() {
 
@@ -131,10 +196,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
 
             ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                    {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
+                    {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, SMS_LOC_REQUEST_CODE);
         }
 
 
@@ -434,7 +500,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         public void onFinish() {
                             if (((AlertDialog) dialog).isShowing()) {
                                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
-                                    startLocationUpdates();
+                                  //  startLocationUpdates();
+
+                                    /*New Location Update call for Testing Purposes*/
+                                    startLocUpdates();
+                                    dialog.dismiss();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
                                 }
