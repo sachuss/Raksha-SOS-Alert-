@@ -123,15 +123,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 view.startAnimation(shake);
                 /*Button shake animation*/
 
+                    if(service.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
+                            //startLocationUpdates();
 
-                if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
-                    //startLocationUpdates();
+                            /*New Location Updates for Testing Purposes*/
+                            startLocUpdates();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else
+                    {
 
-                    /*New Location Updates for Testing Purposes*/
-                    startLocUpdates();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
-                }
+                        enableGps();
+                    }
             }
         });
 
