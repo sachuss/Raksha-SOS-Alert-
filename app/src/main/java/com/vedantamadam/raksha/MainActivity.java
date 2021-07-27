@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int SMS_LOC_REQUEST_CODE = 100;
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5000;
     int count, i;
-    String msg;
+    String msg, provider;
     Button sosBut;
     String phGlobal1, phGlobal2;
     Intent locIntent;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String cityNameLat = "", cityNameLon = "", preCityNameLat = "", preCityNameLon = "";
     LocationManager service;
     Location mLocation;
+    Criteria criteria;
+
 
     //New Location Manager & Listener for testing purpose
     LocationManager locationManager;
@@ -101,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dataAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sosSpin.setAdapter(dataAdaptor);
 
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+
 
         checkPermission();
 
@@ -119,9 +125,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 /*Button shake animation*/
-                Animation shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_shake);
+                Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_shake);
                 view.startAnimation(shake);
                 /*Button shake animation*/
+
+
+
+
 
 
                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
@@ -132,7 +142,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 } else {
                     Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
                 }
-            }
+                    }
+
+
         });
 
 
@@ -142,12 +154,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onLocationChanged(@NonNull Location location) {
 
 
-
-
                 msg =
                         "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
                                 + "&travelmode=driving";
-               // Toast.makeText(getApplicationContext(),"NetLoc is:" +msg,Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(),"NetLoc is:" +msg,Toast.LENGTH_LONG).show();
 
                 cityNameLat = String.valueOf(location.getLatitude());
                 cityNameLon = String.valueOf(location.getLongitude());
@@ -158,16 +168,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 } else {
 
                     MyGlobalClass glbclsobj = new MyGlobalClass();
-                    glbclsobj.sendSMS(getApplicationContext(),msg);
-                    Toast.makeText(getApplicationContext(), "Sending message...", Toast.LENGTH_SHORT).show();
+                    glbclsobj.sendSMS(getApplicationContext(), msg);
+
                     locationManager.removeUpdates(locationListener);
                     MyGlobalClass.fall = true;
                 }
 
 
-
             }
+
+          /*  @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(getApplicationContext(), "GPS turned off", Toast.LENGTH_SHORT).show();
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Location location = locationManager.getLastKnownLocation(locationManager.PASSIVE_PROVIDER);
+                Toast.makeText(getApplicationContext(),"Location is: " + location.getLatitude(),Toast.LENGTH_SHORT).show();
+            }*/
         };
+
+
 
 
     }
@@ -176,7 +204,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
  /*New Location Updates for Testing Purposes*/
 public void startLocUpdates()
 {
+
     locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+    provider = locationManager.getBestProvider(criteria, true);
     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         // TODO: Consider calling
         //    ActivityCompat#requestPermissions
@@ -187,7 +218,10 @@ public void startLocUpdates()
         // for ActivityCompat#requestPermissions for more details.
         return;
     }
-    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, locationListener);
+    if(provider == null)
+    {Toast.makeText(this,"No location providers available",Toast.LENGTH_SHORT).show();}
+    else
+    {locationManager.requestLocationUpdates(provider, 60000, 0, locationListener);}
    // Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER );
     MyGlobalClass.fall = true;
 
@@ -288,7 +322,8 @@ public void startLocUpdates()
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+              //  ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+                Toast.makeText(getApplicationContext(),"No Location Info will be available with Location turned OFF",Toast.LENGTH_LONG).show();
             }
         });
         AlertDialog dialog = gpsBuilder.create();

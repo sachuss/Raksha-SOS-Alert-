@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -31,6 +32,8 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
     Toolbar fallDetection;
     int index;
     Spinner spinner;
+    LocationManager service;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -53,6 +56,11 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
         fallDetection = (Toolbar) findViewById(R.id.fallDetection);
 
+        service = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if(!service.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        { Toast.makeText(getApplicationContext(),"No Location Info will be available with Location turned OFF",Toast.LENGTH_LONG).show();}
+
+
         fallDetection.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +76,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                // MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
-                if(MyGlobalClass.senstivityNumber.length() > 0) {
+
                     Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
                     serviceIntent.putExtra("inputExtra", "");
                     if (bgSwitch.isChecked()) {
@@ -97,6 +105,8 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
 
                         ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
+                      //  startService(serviceIntent);
+
 
 
                     } else {
@@ -105,12 +115,8 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
                     }
                 }
-                else
-                {Toast.makeText(getApplicationContext(),"Please enter sensitivity value",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
-                }
-            }
+
+
         });
 
 

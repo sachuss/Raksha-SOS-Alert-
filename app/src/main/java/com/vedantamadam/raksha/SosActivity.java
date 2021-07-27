@@ -51,10 +51,10 @@ public class SosActivity extends AppCompatActivity  {
         });
 
 
-        servic = (LocationManager) getSystemService(LOCATION_SERVICE);
+       /* servic = (LocationManager) getSystemService(LOCATION_SERVICE);
         enable = servic.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if(! enable)
-        {enabledGps();}
+        {enabledGps();}*/
 
 
 
@@ -163,6 +163,8 @@ public class SosActivity extends AppCompatActivity  {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+
 
 
                                         ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
