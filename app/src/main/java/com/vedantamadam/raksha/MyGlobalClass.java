@@ -9,8 +9,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MyGlobalClass {
-    public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "";
+    public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "",timestamp;
+    public static long time_startLocUpdates, time_onLocationResult;
     public static boolean fall = true;
+
 
     public static void save_pref(Context context, String key, String value) {
         SharedPreferences pref = context.getSharedPreferences("com.vedantamadam.raksha.PREFERENCE", Context.MODE_PRIVATE);
@@ -46,6 +48,18 @@ public class MyGlobalClass {
         sos_ph2 = read_pref(context, "e2");
         return (sos_ph1 != null && !sos_ph1.isEmpty()) || (sos_ph2 != null && !sos_ph2.isEmpty());
 
+    }
+
+    public static String time_forLocFetch(){
+        try{
+            long time_duration = time_onLocationResult - time_startLocUpdates ;
+            time_startLocUpdates = 0;
+            time_onLocationResult = 0;
+            return String.valueOf(time_duration);
+        } catch (Exception ex){
+
+            return null;
+        }
     }
 
     public void sendSMS(Context context, String msg) {

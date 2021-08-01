@@ -47,6 +47,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
 import java.io.IOException;
+import java.security.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5000;
     private static final long UPDATE_INTERVAL = 5 * 1000 ; // 5 seconds
     private static final long FASTEST_INTERVAL = 1 * 1000; // 1 second
+
     int count, i;
     String msg, provider;
     Button sosBut;
@@ -213,10 +219,13 @@ locationCallback = new LocationCallback(){
   public void onLocationResult(LocationResult locationResult)
   {
 
+      MyGlobalClass.time_onLocationResult = System.currentTimeMillis();
       mLocation = locationResult.getLastLocation();
+      String time_forLocFetch = MyGlobalClass.time_forLocFetch();
+
       msg =
-              "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
-                      + "&travelmode=driving";
+              "[Emergency SOS] I have initiated this SOS message on " + MyGlobalClass.timestamp + " \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                      + "&travelmode=driving" + ". Location fetched in " + time_forLocFetch + "ms";
 
       cityNameLat = String.valueOf(mLocation.getLatitude());
       cityNameLon = String.valueOf(mLocation.getLongitude());
@@ -413,7 +422,13 @@ public void startLocUpdates()
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void startLocationUpdates() {
 
+
+
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy, h:mm a");
+        MyGlobalClass.timestamp = df.format(Calendar.getInstance().getTime());
+
         // Create the location request to start receiving updates
+        MyGlobalClass.time_startLocUpdates = System.currentTimeMillis();
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
