@@ -4,15 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/common_google_signin_btn_text_dark_focused"
+   >
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/design_default_color_on_secondary"
-        android:orientation="vertical"
-        tools:context=".SosActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarSOS"
@@ -22,18 +17,15 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:navigationIcon="@android:drawable/ic_menu_revert"
+
+            app:layout_constraintStart_toStartOf="@id/guideline17"
+            app:layout_constraintEnd_toEndOf="@id/guideline19"
+            app:layout_constraintTop_toBottomOf="@id/guideline20"
+            app:layout_constraintBottom_toTopOf="@id/guideline21"
+
             app:title="SOS Numbers" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
 
-
-            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,6 +33,14 @@
 
                 android:gravity="center"
                 android:text="Emergency Number 1"
+                android:layout_marginLeft="20sp"
+
+
+                app:layout_constraintStart_toStartOf="@id/guideline17"
+                app:layout_constraintEnd_toStartOf="@id/guideline18"
+                app:layout_constraintTop_toBottomOf="@id/guideline21"
+                app:layout_constraintBottom_toTopOf="@id/guideline22"
+
 
                 android:textColor="@android:color/holo_blue_bright"
                 android:textSize="16sp"
@@ -51,64 +51,53 @@
                 android:id="@+id/sos1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="40sp"
                 android:ems="10"
                 android:inputType="phone"
                 android:maxLength="15"
                 android:nextFocusDown="@id/sos2"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@id/guideline18"
+                app:layout_constraintEnd_toEndOf="@id/guideline19"
+                app:layout_constraintTop_toBottomOf="@id/guideline21"
+                app:layout_constraintBottom_toTopOf="@id/guideline22"/>
 
 
-        </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Emergency Number 2"
+                android:layout_marginLeft="20sp"
 
                 android:textColor="@android:color/holo_blue_bright"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:typeface="monospace" />
+                android:typeface="monospace"
+                app:layout_constraintStart_toStartOf="@id/guideline17"
+                app:layout_constraintEnd_toStartOf="@id/guideline18"
+                app:layout_constraintTop_toBottomOf="@id/guideline22"
+                app:layout_constraintBottom_toTopOf="@id/guideline23"/>
 
 
             <EditText
                 android:id="@+id/sos2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="40sp"
                 android:ems="10"
                 android:inputType="phone"
                 android:maxLength="15"
                 android:nextFocusDown="@id/save"
-                android:textColor="@android:color/white" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:orientation="horizontal" />
+                android:textColor="@android:color/white"
+                app:layout_constraintStart_toStartOf="@id/guideline18"
+                app:layout_constraintEnd_toEndOf="@id/guideline19"
+                app:layout_constraintTop_toBottomOf="@id/guideline22"
+                app:layout_constraintBottom_toTopOf="@id/guideline23"/>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+
 
             <Button
                 android:id="@+id/save"
@@ -118,7 +107,11 @@
 
                 android:background="@drawable/oval"
                 android:text="Save"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                app:layout_constraintStart_toStartOf="@id/guideline17"
+                app:layout_constraintEnd_toEndOf="@id/guideline18"
+                app:layout_constraintTop_toBottomOf="@id/guideline23"
+                app:layout_constraintBottom_toTopOf="@id/guideline24"/>
 
             <Button
                 android:id="@+id/butClear"
@@ -128,15 +121,77 @@
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/oval"
                 android:text="CLEAR"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-
-
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                app:layout_constraintStart_toStartOf="@id/guideline18"
+                app:layout_constraintEnd_toEndOf="@id/guideline19"
+                app:layout_constraintTop_toBottomOf="@id/guideline23"
+                app:layout_constraintBottom_toTopOf="@id/guideline24"/>
 
 
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.0"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.08"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.4"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
