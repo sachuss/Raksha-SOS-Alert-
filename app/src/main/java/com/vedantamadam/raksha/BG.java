@@ -103,6 +103,9 @@ public class BG extends Service implements ComponentCallbacks2 {
                 .build();
         final Notification notification = notificationBuilder.build();
         startForeground(1, notification);
+     /*   Intent serviceIntent = new Intent(this,FallDetection.class);
+        startForegroundService(serviceIntent);
+        startService(serviceIntent);*/
         return START_STICKY;
     }
 

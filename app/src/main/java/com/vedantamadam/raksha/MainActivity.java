@@ -37,6 +37,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private static final int SMS_LOC_REQUEST_CODE = 100;
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5000;
+    private static final long UPDATE_INTERVAL = 5 * 1000 ; // 5 seconds
+    private static final long FASTEST_INTERVAL = 1 * 1000; // 1 second
     int count, i;
     String msg, provider;
     Button sosBut;
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     LocationManager service;
     Location mLocation;
     Criteria criteria;
+    private LocationCallback locationCallback;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     //New Location Manager & Listener for testing purpose
@@ -121,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             enableDisplayOver();
         }
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+
         sosBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,10 +144,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
-                    //startLocationUpdates();
+                    /*FusedLocationProviderClient*/
+                    startLocationUpdates();
 
                     /*New Location Updates for Testing Purposes*/
-                    startLocUpdates();
+                 //   startLocUpdates();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
                 }
@@ -149,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         /*New Location Listener for Testing Purposes*/
-        locationListener = new LocationListener() {
+    /*    locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
 
@@ -193,10 +203,49 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Location location = locationManager.getLastKnownLocation(locationManager.PASSIVE_PROVIDER);
                 Toast.makeText(getApplicationContext(),"Location is: " + location.getLatitude(),Toast.LENGTH_SHORT).show();
             }*/
-        };
+     //   };
+        //
+        //
+        //
+        /*FusedLocationClient Callback*/
+locationCallback = new LocationCallback(){
 
+  public void onLocationResult(LocationResult locationResult)
+  {
 
+      mLocation = locationResult.getLastLocation();
+      msg =
+              "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                      + "&travelmode=driving";
 
+      cityNameLat = String.valueOf(mLocation.getLatitude());
+      cityNameLon = String.valueOf(mLocation.getLongitude());
+      if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
+          Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+          MyGlobalClass.fall = true;
+          fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+      } else {
+
+          MyGlobalClass glbclsobj = new MyGlobalClass();
+          glbclsobj.sendSMS(getApplicationContext(),msg);
+          MyGlobalClass.fall = true;
+          fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+      }
+
+      try {
+          onLocationChanged(locationResult.getLastLocation());
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
+
+    @Override
+    public void onLocationAvailability(LocationAvailability locationAvailability) {
+      if(locationAvailability.isLocationAvailable() == false)
+      {Toast.makeText(getApplicationContext(),"Loc not available",Toast.LENGTH_SHORT).show();}
+        super.onLocationAvailability(locationAvailability);
+    }
+};
 
     }
 
@@ -238,11 +287,10 @@ public void startLocUpdates()
     public void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
 
             ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                    {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, SMS_LOC_REQUEST_CODE);
+                    {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
         }
 
 
@@ -368,8 +416,8 @@ public void startLocUpdates()
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        //  mLocationRequest.setInterval(UPDATE_INTERVAL);
-        //   mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+       mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
         mLocationRequest.setNumUpdates(1);
 
@@ -394,7 +442,11 @@ public void startLocUpdates()
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
             return;
         }
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback,null);
+
+
+
+      /*  LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mLocation = locationResult.getLastLocation();
@@ -421,7 +473,7 @@ public void startLocUpdates()
                         }
                     }
                 },
-                Looper.myLooper());
+                Looper.myLooper());*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -542,10 +594,11 @@ public void startLocUpdates()
                         public void onFinish() {
                             if (((AlertDialog) dialog).isShowing()) {
                                 if (MyGlobalClass.if_sosnumber_exist(getApplicationContext())) {
-                                  //  startLocationUpdates();
+                                    /*FusedLocationProviderClient*/
+                                    startLocationUpdates();
 
                                     /*New Location Update call for Testing Purposes*/
-                                    startLocUpdates();
+                                   // startLocUpdates();
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
