@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,6 +22,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -28,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -68,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Button sosBut;
     String phGlobal1, phGlobal2;
     Intent locIntent;
-    SharedPreferences sharedPref;
+    SharedPreferences initialLaunchShared;
+    boolean ranBefore;
     String cityNameLat = "", cityNameLon = "", preCityNameLat = "", preCityNameLon = "";
     LocationManager service;
     Location mLocation;
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onReceive(Context context, Intent intent) {
-            //  Toast.makeText(getApplicationContext(),"In main activity",Toast.LENGTH_SHORT).show();
+
 
             fallAlertBuild();
 
@@ -120,18 +125,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
 
-        checkPermission();
 
 
-        service = (LocationManager) getSystemService(LOCATION_SERVICE);
-        enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!enabled) {
-            enableGps();
+
+        if(isFirstTime())
+        {popUpMessage();}
+
+
+
+        if( ranBefore == true) {
+            checkPermission();
+
+            service = (LocationManager) getSystemService(LOCATION_SERVICE);
+            enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                enableGps();
+            }
+
+            if (!Settings.canDrawOverlays(getApplicationContext())) {
+                enableDisplayOver();
+            }
+
         }
 
-        if (!Settings.canDrawOverlays(this)) {
-            enableDisplayOver();
-        }
+
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -153,8 +171,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     /*FusedLocationProviderClient*/
                     startLocationUpdates();
 
-                    /*New Location Updates for Testing Purposes*/
-                 //   startLocUpdates();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
                 }
@@ -164,55 +180,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
-        /*New Location Listener for Testing Purposes*/
-    /*    locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-
-
-                msg =
-                        "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + location.getLatitude() + "," + location.getLongitude()
-                                + "&travelmode=driving";
-                // Toast.makeText(getApplicationContext(),"NetLoc is:" +msg,Toast.LENGTH_LONG).show();
-
-                cityNameLat = String.valueOf(location.getLatitude());
-                cityNameLon = String.valueOf(location.getLongitude());
-                if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-                    Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
-                    locationManager.removeUpdates(locationListener);
-                    MyGlobalClass.fall = true;
-                } else {
-
-                    MyGlobalClass glbclsobj = new MyGlobalClass();
-                    glbclsobj.sendSMS(getApplicationContext(), msg);
-
-                    locationManager.removeUpdates(locationListener);
-                    MyGlobalClass.fall = true;
-                }
-
-
-            }
-
-          /*  @Override
-            public void onProviderDisabled(String provider) {
-                Toast.makeText(getApplicationContext(), "GPS turned off", Toast.LENGTH_SHORT).show();
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(locationManager.PASSIVE_PROVIDER);
-                Toast.makeText(getApplicationContext(),"Location is: " + location.getLatitude(),Toast.LENGTH_SHORT).show();
-            }*/
-     //   };
-        //
-        //
-        //
         /*FusedLocationClient Callback*/
 locationCallback = new LocationCallback(){
 
@@ -224,8 +191,8 @@ locationCallback = new LocationCallback(){
       String time_forLocFetch = MyGlobalClass.time_forLocFetch();
 
       msg =
-              "[Emergency SOS] I have initiated this SOS message on " + MyGlobalClass.timestamp + " \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
-                      + "&travelmode=driving" + ". Location fetched in " + time_forLocFetch + "ms";
+              "[Emergency SOS] I have initiated this SOS message on " + MyGlobalClass.timestamp + " \n\nYou are my emergency contact and I need your help. \n\nI am at " + " https://maps.google.com/?q=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
+                      + "\nLocation fetched in " + time_forLocFetch + "ms";
 
       cityNameLat = String.valueOf(mLocation.getLatitude());
       cityNameLon = String.valueOf(mLocation.getLongitude());
@@ -258,32 +225,62 @@ locationCallback = new LocationCallback(){
 
     }
 
-
- /*New Location Updates for Testing Purposes*/
-public void startLocUpdates()
-{
-
-    locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
-    provider = locationManager.getBestProvider(criteria, true);
-    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
-        return;
+    private boolean isFirstTime()
+    {
+        initialLaunchShared = getSharedPreferences("InitialLaunch",0);
+        ranBefore = initialLaunchShared.getBoolean("RanBefore",false);
+      if(!ranBefore)
+      {
+          SharedPreferences.Editor editor = initialLaunchShared.edit();
+          editor.putBoolean("RanBefore",true);
+          editor.commit();
+      }
+      return !ranBefore;
     }
-    if(provider == null)
-    {Toast.makeText(this,"No location providers available",Toast.LENGTH_SHORT).show();}
-    else
-    {locationManager.requestLocationUpdates(provider, 60000, 0, locationListener);}
-   // Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER );
-    MyGlobalClass.fall = true;
 
-}
+
+    public void popUpMessage()
+    {
+        AlertDialog.Builder onBoarding = new AlertDialog.Builder(this);
+        onBoarding.setTitle("Onboarding Instructions:");
+
+        onBoarding.setMessage("\nWelcome to Raksha" +
+                "\n\n1) Register your emergency contact numbers under HOME/SOS and SAVE." +
+                "\n\n2) Press the SOS button on the home page in case of an emergency. On pressing the button, an SOS message along with the link of your current location on google  maps will be send to the emergency contacts." +
+                "\n\n3) Use the switch at the 'Fall Detection' page to turn ON/OFF Fall detection functionality and set the Sensitivity value as per your requirement. Switch turned ON will run the application in the background and if any violent shake/fall is detected,  an auto SOS procedure is initiated. You are advised to set your most preferable sensitivity value before registering contacts." +
+                "\n\n4) We recommend to turn ON the Fall Detection switch only when you are out of your home for battery optimization." +
+                "\n\n5) For dual sim phones, please make sure to insert your messaging SIM in slot one." +
+                "\n\n6) Please tick 'Don't Optimise' for Raksha app in the Battery Settings for better performance of FALL DETECTION functionality: How to do it:- Please check the link on Instructions page");
+
+        onBoarding.setCancelable(false);
+
+        onBoarding.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                checkPermission();
+
+
+                service = (LocationManager) getSystemService(LOCATION_SERVICE);
+                enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                if (!enabled) {
+                    enableGps();
+                }
+
+                if (!Settings.canDrawOverlays(getApplicationContext())) {
+                    enableDisplayOver();
+                }
+
+            }
+        });
+        AlertDialog alertDialog = onBoarding.create();
+        alertDialog.show();
+
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT ));
+
+
+    }
+
+
 
     public void onDestroy() {
 
@@ -322,6 +319,7 @@ public void startLocUpdates()
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Please grant SMS & Location permissions to proceed further.\n" +
                             "Application is going to exit");
+                    builder.setCancelable(false);
                     builder.setTitle("PERMISSIONS");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -365,6 +363,7 @@ public void startLocUpdates()
 
         AlertDialog.Builder gpsBuilder = new AlertDialog.Builder(this);
         gpsBuilder.setMessage("TURN ON GPS");
+        gpsBuilder.setCancelable(false);
 
         gpsBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -392,6 +391,7 @@ public void startLocUpdates()
     protected void enableDisplayOver() {
         AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
         displayOver.setMessage("Please allow Raksha to display over other apps.");
+        displayOver.setCancelable(false);
 
         displayOver.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -566,6 +566,7 @@ public void startLocUpdates()
             AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.Theme_AppCompat_DayNight_Dialog_Alert);
 
             builder.setMessage("Your device suffered a violent shake.\n" + "Do you want to cancel sending Emergency SOS  ?")
+                    .setCancelable(false)
 
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
@@ -612,8 +613,6 @@ public void startLocUpdates()
                                     /*FusedLocationProviderClient*/
                                     startLocationUpdates();
 
-                                    /*New Location Update call for Testing Purposes*/
-                                   // startLocUpdates();
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
@@ -627,7 +626,7 @@ public void startLocUpdates()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
             } else {
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_BASE_APPLICATION);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
             }
             dialog.show();
 

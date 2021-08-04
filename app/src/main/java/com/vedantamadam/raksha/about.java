@@ -8,13 +8,14 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
 
 public class about extends AppCompatActivity {
     Toolbar toolBar;
-    TextView textView1,textView2,textView3,textView4,textView5;
+    TextView textView4;
 
 
 
@@ -38,6 +39,9 @@ public class about extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        textView4 = (TextView)findViewById(R.id.t4);
+        Linkify.addLinks(textView4,Linkify.WEB_URLS);
 
     }
 
