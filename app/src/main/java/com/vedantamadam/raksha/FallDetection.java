@@ -26,9 +26,9 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
     Switch bgSwitch;
     EditText senstivityValue;
-    String sValue;
-    SharedPreferences spSwitchState;
-    Boolean checking;
+    String spinner_value;
+//    SharedPreferences spSwitchState;
+    Boolean fallDetection_enabled;
     Toolbar fallDetection;
     int index;
     Spinner spinner;
@@ -74,49 +74,36 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
         bgSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                // MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
 
                     Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
                     serviceIntent.putExtra("inputExtra", "");
-                    if (bgSwitch.isChecked()) {
+                    if (isChecked) {
                       //  MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
-                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
-                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
-                        editSwitch.putBoolean("s1", true);
-                        editSwitch.putString("s2", MyGlobalClass.senstivityNumber);
-                        editSwitch.putInt("spinnerValue",spinner.getSelectedItemPosition());
-
-                        editSwitch.apply();
-
+//                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
+//                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
+//                        editSwitch.putBoolean("fallDetection_enabled", true);
+//                        editSwitch.putString("spinner_value", MyGlobalClass.senstivityNumber);
+//                        editSwitch.putInt("spinner_pos",spinner.getSelectedItemPosition());
+//                        editSwitch.apply();
+                        MyGlobalClass.save_pref(getApplicationContext(),"fallDetection_enabled","true");
+                        MyGlobalClass.save_pref(getApplicationContext(),"spinner_value",MyGlobalClass.senstivityNumber);
+                        MyGlobalClass.save_pref(getApplicationContext(),"spinner_pos", Integer.toString(spinner.getSelectedItemPosition()));
+                        ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
                     } else {
                      //   MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
-                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
-                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
-                        editSwitch.putBoolean("s1", false);
-                        editSwitch.putString("s2", MyGlobalClass.senstivityNumber);
-                        editSwitch.putInt("spinnerValue",spinner.getSelectedItemPosition());
-                        editSwitch.apply();
-                    }
+//                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
+//                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
+//                        editSwitch.putBoolean("fallDetection_enabled", false);
+//                        editSwitch.putString("spinner_value", MyGlobalClass.senstivityNumber);
+//                        editSwitch.putInt("spinner_pos",spinner.getSelectedItemPosition());
+//                        editSwitch.apply();
 
-                    if (b) {
-
-
-
-
-                        ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
-                      //  startService(serviceIntent);
-
-
-
-                    } else {
-
+                        MyGlobalClass.save_pref(getApplicationContext(),"fallDetection_enabled","false");
                         unregisterList();
-
                     }
                 }
-
-
         });
 
 
@@ -136,12 +123,17 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
 
     public void loadSwitchState() {
-        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
+//        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
         //  bgSwitch.setChecked(true);
-        checking = spSwitchState.getBoolean("s1", Boolean.parseBoolean(""));
-        sValue = spSwitchState.getString("s2","");
-        index = spSwitchState.getInt("spinnerValue",0);
-        bgSwitch.setChecked(checking);
+//        checking = spSwitchState.getBoolean("fallDetection", Boolean.parseBoolean(""));
+//        sValue = spSwitchState.getString("spinner_value",""); //No use
+//        index = spSwitchState.getInt("spinner_pos",0);
+
+        fallDetection_enabled = Boolean.parseBoolean(MyGlobalClass.read_pref(getApplicationContext(),"fallDetection_enabled"));
+        spinner_value = MyGlobalClass.read_pref(getApplicationContext(),"spinner_value");
+        String spinner_pos = MyGlobalClass.read_pref(getApplicationContext(),"spinner_pos");
+        index = spinner_pos !=null ? Integer.parseInt(spinner_pos):0;
+        bgSwitch.setChecked(fallDetection_enabled);
 
         spinner.setSelection(index);
       //  senstivityValue.setText(sValue);
@@ -151,22 +143,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String item = adapterView.getItemAtPosition(i).toString();
-        switch(item){
-            case "10":
-            case "20":
-            case "30":
-            case "40":
-            case "50":
-            case "60":
-            case "70":
-            case "80":
-            case "90":
-            case "100":
-                MyGlobalClass.senstivityNumber = item;
-                break;
-
-
-        }
+        MyGlobalClass.senstivityNumber = item;
     }
 
     @Override
