@@ -16,6 +16,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Criteria criteria;
     private LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    MediaPlayer welcomeMusic;
 
 
     //New Location Manager & Listener for testing purpose
@@ -227,13 +229,12 @@ locationCallback = new LocationCallback(){
 
     private boolean isFirstTime()
     {
-        initialLaunchShared = getSharedPreferences("InitialLaunch",0);
-        ranBefore = initialLaunchShared.getBoolean("RanBefore",false);
+
+        ranBefore = (Boolean.valueOf(MyGlobalClass.read_pref(getApplicationContext(),"FirstLaunch")));
       if(!ranBefore)
       {
-          SharedPreferences.Editor editor = initialLaunchShared.edit();
-          editor.putBoolean("RanBefore",true);
-          editor.commit();
+          MyGlobalClass.save_pref(getApplicationContext(),"FirstLaunch","true");
+
       }
       return !ranBefore;
     }
@@ -241,22 +242,25 @@ locationCallback = new LocationCallback(){
 
     public void popUpMessage()
     {
-        AlertDialog.Builder onBoarding = new AlertDialog.Builder(this);
+        AlertDialog.Builder onBoarding = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
         onBoarding.setTitle("Onboarding Instructions:");
+
+
 
         onBoarding.setMessage("\nWelcome to Raksha" +
                 "\n\n1) Register your emergency contact numbers under HOME/SOS and SAVE." +
                 "\n\n2) Press the SOS button on the home page in case of an emergency. On pressing the button, an SOS message along with the link of your current location on google  maps will be send to the emergency contacts." +
                 "\n\n3) Use the switch at the 'Fall Detection' page to turn ON/OFF Fall detection functionality and set the Sensitivity value as per your requirement. Switch turned ON will run the application in the background and if any violent shake/fall is detected,  an auto SOS procedure is initiated. You are advised to set your most preferable sensitivity value before registering contacts." +
-                "\n\n4) We recommend to turn ON the Fall Detection switch only when you are out of your home for battery optimization." +
-                "\n\n5) For dual sim phones, please make sure to insert your messaging SIM in slot one." +
-                "\n\n6) Please tick 'Don't Optimise' for Raksha app in the Battery Settings for better performance of FALL DETECTION functionality: How to do it:- Please check the link on Instructions page");
+                "\n\n4) Please tick 'Don't Optimise' for Raksha app in the Battery Settings for better performance of FALL DETECTION functionality: How to do it:- Please check the link on Instructions page." +
+                "\n\n5) For dual sim phones, please make sure to insert your messaging SIM in slot one.");
 
         onBoarding.setCancelable(false);
 
         onBoarding.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                welcomeMusic.stop();
+
                 checkPermission();
 
 
@@ -273,7 +277,16 @@ locationCallback = new LocationCallback(){
             }
         });
         AlertDialog alertDialog = onBoarding.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                 welcomeMusic = MediaPlayer.create(getApplicationContext(),R.raw.welcome);
+                welcomeMusic.start();
+            }
+
+        });
         alertDialog.show();
+
 
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT ));
 
