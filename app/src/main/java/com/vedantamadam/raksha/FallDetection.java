@@ -91,6 +91,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
                         MyGlobalClass.save_pref(getApplicationContext(),"spinner_value",MyGlobalClass.senstivityNumber);
                         MyGlobalClass.save_pref(getApplicationContext(),"spinner_pos", Integer.toString(spinner.getSelectedItemPosition()));
                         ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
+                        spinner.setEnabled(false);
                     } else {
                      //   MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
 //                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
@@ -99,7 +100,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 //                        editSwitch.putString("spinner_value", MyGlobalClass.senstivityNumber);
 //                        editSwitch.putInt("spinner_pos",spinner.getSelectedItemPosition());
 //                        editSwitch.apply();
-
+                        spinner.setEnabled(true);
                         MyGlobalClass.save_pref(getApplicationContext(),"fallDetection_enabled","false");
                         unregisterList();
                     }
@@ -134,8 +135,10 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
         String spinner_pos = MyGlobalClass.read_pref(getApplicationContext(),"spinner_pos");
         index = spinner_pos !=null ? Integer.parseInt(spinner_pos):0;
         bgSwitch.setChecked(fallDetection_enabled);
-
         spinner.setSelection(index);
+        if (fallDetection_enabled){
+            spinner.setEnabled(false);
+        }
       //  senstivityValue.setText(sValue);
     }
 
