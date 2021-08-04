@@ -185,9 +185,10 @@
 
 
         android:padding="20sp"
+        android:gravity="start"
 
         android:justificationMode="inter_word"
-        android:text="We recommend to turn ON the Fall Detection switch  only when you are out of your home for  battery optimization.  Please tick 'Don't Optimise'  for Raksha app  in the Battery Settings for better performance of FALL DETECTION functionality. \nHow to do it: \nhttps://github.com/sachuss/sosAlert/wiki/Readme"
+        android:text="Please tick 'Don't Optimise' for Raksha app in the Battery Settings for better performance of FALL DETECTION functionality.\nHow to do it: \nhttps://github.com/sachuss/sosAlert/wiki/Readme"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/holo_blue_bright"
 
