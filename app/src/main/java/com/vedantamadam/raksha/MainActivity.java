@@ -591,6 +591,7 @@ locationCallback = new LocationCallback(){
                                 startActivity(intent1);
                                 Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();*/
                             MyGlobalClass.fall = true;
+                            startLocationUpdates();
 
 
                             // TODO: Add positive button action code here
