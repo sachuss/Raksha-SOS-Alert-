@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         if( ranBefore == true) {
             checkPermission();
-
             service = (LocationManager) getSystemService(LOCATION_SERVICE);
             enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!enabled) {
@@ -147,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (!Settings.canDrawOverlays(getApplicationContext())) {
                 enableDisplayOver();
             }
+
+            turnonService(); //Turn on background service if falldetection is already turned on
 
         }
 
@@ -225,6 +226,17 @@ locationCallback = new LocationCallback(){
     }
 };
 
+    }
+
+    private void turnonService() {
+
+        Boolean fallDetection_enabled = Boolean.parseBoolean(MyGlobalClass.read_pref(getApplicationContext(),"fallDetection_enabled"));
+        if(fallDetection_enabled){
+            Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
+            serviceIntent.putExtra("inputExtra", "");
+            ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
+            MyGlobalClass.senstivityNumber = MyGlobalClass.read_pref(getApplicationContext(),"spinner_value");
+        }
     }
 
     private boolean isFirstTime()
