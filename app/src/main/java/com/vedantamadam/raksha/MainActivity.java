@@ -642,6 +642,7 @@ locationCallback = new LocationCallback(){
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
                                     dialog.dismiss();
+                                    MyGlobalClass.fall = true;
                                 }
                             }
                         }
