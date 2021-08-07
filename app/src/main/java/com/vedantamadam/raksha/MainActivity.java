@@ -415,7 +415,7 @@ locationCallback = new LocationCallback(){
 
     protected void enableDisplayOver() {
         AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
-        displayOver.setMessage("Please allow Raksha to display over other apps.");
+        displayOver.setMessage("Raksha allows you to cancel sending SOS. To enable this feature, please allow Raksha to display over other apps.");
         displayOver.setCancelable(false);
 
         displayOver.setPositiveButton("OK", new DialogInterface.OnClickListener() {
