@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     startLocationUpdates();
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please set emergency phone numbers in SOS Numbers first.", Toast.LENGTH_LONG).show();
                 }
                     }
 
@@ -200,7 +200,7 @@ locationCallback = new LocationCallback(){
       cityNameLat = String.valueOf(mLocation.getLatitude());
       cityNameLon = String.valueOf(mLocation.getLongitude());
       if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-          Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+          Toast.makeText(getApplicationContext(), "An SOS message with current location details is already sent.", Toast.LENGTH_SHORT).show();
           MyGlobalClass.fall = true;
           fusedLocationProviderClient.removeLocationUpdates(locationCallback);
       } else {
@@ -640,7 +640,7 @@ locationCallback = new LocationCallback(){
 
                                     dialog.dismiss();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Please set emergency phone numbers in SOS Numbers first.", Toast.LENGTH_LONG).show();
                                     dialog.dismiss();
                                     MyGlobalClass.fall = true;
                                 }
