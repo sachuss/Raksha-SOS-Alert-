@@ -221,7 +221,7 @@ locationCallback = new LocationCallback(){
     @Override
     public void onLocationAvailability(LocationAvailability locationAvailability) {
       if(locationAvailability.isLocationAvailable() == false)
-      {Toast.makeText(getApplicationContext(),"Sorry, unable to fetch the location. Please turn on Location on your device.",Toast.LENGTH_SHORT).show();}
+      {Toast.makeText(getApplicationContext(),"Sorry, unable to fetch the location of your mobile. Please turn on Location in your mobile settings.",Toast.LENGTH_SHORT).show();}
         super.onLocationAvailability(locationAvailability);
     }
 };

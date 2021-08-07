@@ -58,7 +58,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
         service = (LocationManager) getSystemService(LOCATION_SERVICE);
         if(!service.isProviderEnabled(LocationManager.GPS_PROVIDER))
-        { Toast.makeText(getApplicationContext(),"Raksha requires the location of your mobile for sending SOS SMS. Please turn on location on your mobile. ",Toast.LENGTH_LONG).show();}
+        { Toast.makeText(getApplicationContext(),"Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings. ",Toast.LENGTH_LONG).show();}
 
 
         fallDetection.setNavigationOnClickListener(new View.OnClickListener() {
