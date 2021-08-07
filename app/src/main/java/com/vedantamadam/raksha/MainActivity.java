@@ -336,11 +336,11 @@ locationCallback = new LocationCallback(){
             case SMS_LOC_REQUEST_CODE: {
                 if (((grantResults).length > 0) && (grantResults[0] + grantResults[1]) == PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
 
 
                 } else {
-                    Toast.makeText(this, "SMS/Permissions Denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "SMS/Permissions Denied", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Please grant SMS & Location permissions to proceed further.\n" +
                             "Application is going to exit");
