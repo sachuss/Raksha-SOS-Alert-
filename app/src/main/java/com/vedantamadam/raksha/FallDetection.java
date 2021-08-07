@@ -6,7 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -25,9 +25,9 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
 
     Switch bgSwitch;
-    EditText senstivityValue;
+
     String spinner_value;
-//    SharedPreferences spSwitchState;
+
     Boolean fallDetection_enabled;
     Toolbar fallDetection;
     int index;
@@ -44,7 +44,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
 
 
         bgSwitch = (Switch) findViewById(R.id.fallDetect);
-      //  senstivityValue = (EditText) findViewById(R.id.senstivity);
+
 
         spinner = (Spinner) findViewById(R.id.spinnerValue);
         spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
@@ -75,31 +75,19 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
         bgSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-               // MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
+
 
                     Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
                     serviceIntent.putExtra("inputExtra", "");
                     if (isChecked) {
-                      //  MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
-//                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
-//                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
-//                        editSwitch.putBoolean("fallDetection_enabled", true);
-//                        editSwitch.putString("spinner_value", MyGlobalClass.senstivityNumber);
-//                        editSwitch.putInt("spinner_pos",spinner.getSelectedItemPosition());
-//                        editSwitch.apply();
+
                         MyGlobalClass.save_pref(getApplicationContext(),"fallDetection_enabled","true");
                         MyGlobalClass.save_pref(getApplicationContext(),"spinner_value",MyGlobalClass.senstivityNumber);
                         MyGlobalClass.save_pref(getApplicationContext(),"spinner_pos", Integer.toString(spinner.getSelectedItemPosition()));
                         ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
                         spinner.setEnabled(false);
                     } else {
-                     //   MyGlobalClass.senstivityNumber = senstivityValue.getText().toString();
-//                        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
-//                        SharedPreferences.Editor editSwitch = spSwitchState.edit();
-//                        editSwitch.putBoolean("fallDetection_enabled", false);
-//                        editSwitch.putString("spinner_value", MyGlobalClass.senstivityNumber);
-//                        editSwitch.putInt("spinner_pos",spinner.getSelectedItemPosition());
-//                        editSwitch.apply();
+
                         spinner.setEnabled(true);
                         MyGlobalClass.save_pref(getApplicationContext(),"fallDetection_enabled","false");
                         unregisterList();
@@ -117,18 +105,14 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
     public void unregisterList() {
 
         Intent serviceIntent = new Intent(getApplicationContext(), BG.class);
-        //mSensorManager.unregisterListener(mSensorListener);
+
         stopService(serviceIntent);
 
     }
 
 
     public void loadSwitchState() {
-//        spSwitchState = getSharedPreferences("SwitchState", MODE_PRIVATE);
-        //  bgSwitch.setChecked(true);
-//        checking = spSwitchState.getBoolean("fallDetection", Boolean.parseBoolean(""));
-//        sValue = spSwitchState.getString("spinner_value",""); //No use
-//        index = spSwitchState.getInt("spinner_pos",0);
+
 
         fallDetection_enabled = Boolean.parseBoolean(MyGlobalClass.read_pref(getApplicationContext(),"fallDetection_enabled"));
         spinner_value = MyGlobalClass.read_pref(getApplicationContext(),"spinner_value");
@@ -139,7 +123,7 @@ public class FallDetection extends AppCompatActivity implements AdapterView.OnIt
         if (fallDetection_enabled){
             spinner.setEnabled(false);
         }
-      //  senstivityValue.setText(sValue);
+
     }
 
 

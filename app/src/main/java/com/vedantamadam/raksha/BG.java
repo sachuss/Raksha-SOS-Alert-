@@ -47,7 +47,7 @@ public class BG extends Service implements ComponentCallbacks2 {
 
             senValue = Integer.parseInt(MyGlobalClass.senstivityNumber);
             int offset = 0;
-//                offset = 4; //Use when testing
+
 
             if (mAccel > (senValue + offset)) {
                 Intent broadcastIntent = new Intent();
@@ -103,9 +103,7 @@ public class BG extends Service implements ComponentCallbacks2 {
                 .build();
         final Notification notification = notificationBuilder.build();
         startForeground(1, notification);
-     /*   Intent serviceIntent = new Intent(this,FallDetection.class);
-        startForegroundService(serviceIntent);
-        startService(serviceIntent);*/
+
         return START_STICKY;
     }
 

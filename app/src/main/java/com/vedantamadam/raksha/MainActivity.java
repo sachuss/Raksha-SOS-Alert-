@@ -8,22 +8,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
+
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Looper;
+
 import android.provider.Settings;
-import android.view.Gravity;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -32,7 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,11 +52,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 
 import java.io.IOException;
-import java.security.Timestamp;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final long UPDATE_INTERVAL = 5 * 1000 ; // 5 seconds
     private static final long FASTEST_INTERVAL = 1 * 1000; // 1 second
 
-    int count, i;
-    String msg, provider;
+
+    String msg;
     Button sosBut;
-    String phGlobal1, phGlobal2;
+
     Intent locIntent;
-    SharedPreferences initialLaunchShared;
+
     boolean ranBefore;
     String cityNameLat = "", cityNameLon = "", preCityNameLat = "", preCityNameLon = "";
     LocationManager service;
@@ -84,13 +84,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     MediaPlayer welcomeMusic;
 
 
-    //New Location Manager & Listener for testing purpose
-    LocationManager locationManager;
-    LocationListener locationListener;
 
 
     boolean enabled;
-    private Dialog dialog, prevDialog;
+    private Dialog dialog;
     private LocationRequest mLocationRequest;
     final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -200,7 +197,7 @@ locationCallback = new LocationCallback(){
       cityNameLat = String.valueOf(mLocation.getLatitude());
       cityNameLon = String.valueOf(mLocation.getLongitude());
       if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-          Toast.makeText(getApplicationContext(), "An SOS message with current location details is already sent.", Toast.LENGTH_SHORT).show();
+          Toast.makeText(getApplicationContext(), "An SOS message with current location details is already sent.", Toast.LENGTH_LONG).show();
           MyGlobalClass.fall = true;
           fusedLocationProviderClient.removeLocationUpdates(locationCallback);
       } else {
@@ -221,7 +218,7 @@ locationCallback = new LocationCallback(){
     @Override
     public void onLocationAvailability(LocationAvailability locationAvailability) {
       if(locationAvailability.isLocationAvailable() == false)
-      {Toast.makeText(getApplicationContext(),"Sorry, unable to fetch the location of your mobile. Please turn on Location in your mobile settings.",Toast.LENGTH_SHORT).show();}
+      {Toast.makeText(getApplicationContext(),"Sorry, unable to fetch the location of your mobile. Please turn on Location in your mobile settings.",Toast.LENGTH_LONG).show();}
         super.onLocationAvailability(locationAvailability);
     }
 };
@@ -340,7 +337,7 @@ locationCallback = new LocationCallback(){
 
 
                 } else {
-//                    Toast.makeText(this, "SMS/Permissions Denied", Toast.LENGTH_SHORT).show();
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Please grant SMS & Location permissions to proceed further.\n" +
                             "Application is going to exit");
@@ -403,7 +400,7 @@ locationCallback = new LocationCallback(){
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-              //  ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+
                 Toast.makeText(getApplicationContext(),"Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings.",Toast.LENGTH_LONG).show();
             }
         });
@@ -464,7 +461,7 @@ locationCallback = new LocationCallback(){
 
         service = (LocationManager) getSystemService(LOCATION_SERVICE);
         enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        //  mLocationRequest.
+
 
         // Create LocationSettingsRequest object using location request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
@@ -475,7 +472,7 @@ locationCallback = new LocationCallback(){
         // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
         SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
-        //  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -485,35 +482,6 @@ locationCallback = new LocationCallback(){
         fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback,null);
 
 
-
-      /*  LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        mLocation = locationResult.getLastLocation();
-                        msg =
-                                "[Emergency SOS] I have initiated this SOS message. \n\n You are my emergency contact and I need your help. \n\n I am at " + " https://www.google.com/maps/dir/?api=1&destination=" + mLocation.getLatitude() + "," + mLocation.getLongitude()
-                                        + "&travelmode=driving";
-
-                        cityNameLat = String.valueOf(mLocation.getLatitude());
-                        cityNameLon = String.valueOf(mLocation.getLongitude());
-                        if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-                            Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
-                            MyGlobalClass.fall = true;
-                        } else {
-
-                            MyGlobalClass glbclsobj = new MyGlobalClass();
-                            glbclsobj.sendSMS(getApplicationContext(),msg);
-                            MyGlobalClass.fall = true;
-                        }
-
-                        try {
-                            onLocationChanged(locationResult.getLastLocation());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                Looper.myLooper());*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -597,11 +565,7 @@ locationCallback = new LocationCallback(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                             /*   Intent intent1 = new Intent(Intent.ACTION_MAIN);
-                                intent1.addCategory(Intent.CATEGORY_HOME);
-                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent1);
-                                Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();*/
+
                             MyGlobalClass.fall = true;
 
 

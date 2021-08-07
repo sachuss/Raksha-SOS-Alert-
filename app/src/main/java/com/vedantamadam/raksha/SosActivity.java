@@ -1,20 +1,20 @@
 package com.vedantamadam.raksha;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.ActivityManager;
 
-import android.content.DialogInterface;
+
+
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.LocationManager;
-import android.os.Build;
+
+
+
 import android.os.Bundle;
 
-import android.telephony.PhoneNumberFormattingTextWatcher;
+
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.Button;
@@ -27,8 +27,6 @@ public class SosActivity extends AppCompatActivity  {
     Button saveBut,clearBut;
     private String phoneN1, phoneN2;
     public  String appendedPh1,appendedPh2;
-    LocationManager servic;
-    boolean enable;
 
 
     @Override
@@ -51,10 +49,7 @@ public class SosActivity extends AppCompatActivity  {
         });
 
 
-       /* servic = (LocationManager) getSystemService(LOCATION_SERVICE);
-        enable = servic.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(! enable)
-        {enabledGps();}*/
+
 
 
 
@@ -73,7 +68,7 @@ public class SosActivity extends AppCompatActivity  {
 
                 if ((ph1 == null || ph1.isEmpty()) && (ph2 == null || ph2.isEmpty())) {
                     // If there is no valid mobile no. entered or both the phonenumber edittext are empty
-                    Toast.makeText(getApplicationContext(), "Please enter atleat one valid SOS contact number.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter at least one valid SOS contact number.", Toast.LENGTH_SHORT).show();
                 } else if (emergencyNo1.getText().length()!=0 && ph1 == null){
                     //Invalid mobile no. is entered in emergencyNo1
                     Toast.makeText(getApplicationContext(), "Please enter valid SOS contact number.", Toast.LENGTH_SHORT).show();
@@ -101,9 +96,7 @@ public class SosActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if((emergencyNo1.getText().length() != 0) || (emergencyNo2.getText().length() != 0) ) {
-//                    sharedPreferences = getSharedPreferences("emergencybook", MODE_PRIVATE);
-//                    SharedPreferences.Editor edito = sharedPreferences.edit();
-//                    edito.clear().commit();
+
 
                     MyGlobalClass.delete_pref(getApplicationContext(),"e1");
                     MyGlobalClass.delete_pref(getApplicationContext(),"e2");
@@ -135,9 +128,7 @@ public class SosActivity extends AppCompatActivity  {
     {
 
 
-//        sharedPreferences = getSharedPreferences("emergencybook",MODE_PRIVATE);
-//        phoneN1 = sharedPreferences.getString("e1","");
-//        phoneN2 = sharedPreferences.getString("e2","");
+
 
         phoneN1 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
         phoneN2 = MyGlobalClass.read_pref(getApplicationContext(),"e2");
@@ -152,36 +143,7 @@ public class SosActivity extends AppCompatActivity  {
     }
 
 
-    protected void enabledGps()
-    {
 
-
-        AlertDialog.Builder gpsBuilder = new AlertDialog.Builder(this);
-        gpsBuilder.setMessage("Without GPS turned on our application will not work");
-
-        gpsBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-
-
-
-                                        ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
-
-
-            }
-        });
-
-        AlertDialog dialog = gpsBuilder.create();
-        dialog.show();
-
-
-
-
-
-
-    }
 
     public void onStop() {
 
