@@ -404,7 +404,7 @@ locationCallback = new LocationCallback(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
               //  ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
-                Toast.makeText(getApplicationContext(),"No Location Info will be available with Location turned OFF",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings.",Toast.LENGTH_LONG).show();
             }
         });
         AlertDialog dialog = gpsBuilder.create();
