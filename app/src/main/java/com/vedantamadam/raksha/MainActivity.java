@@ -387,7 +387,7 @@ locationCallback = new LocationCallback(){
 
 
         AlertDialog.Builder gpsBuilder = new AlertDialog.Builder(this);
-        gpsBuilder.setMessage("TURN ON GPS");
+        gpsBuilder.setMessage("Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings.");
         gpsBuilder.setCancelable(false);
 
         gpsBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -415,7 +415,7 @@ locationCallback = new LocationCallback(){
 
     protected void enableDisplayOver() {
         AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
-        displayOver.setMessage("Raksha allows you to cancel sending SOS. To enable this feature, please allow Raksha to display over other apps.");
+        displayOver.setMessage("Raksha requires permission to display over other apps.");
         displayOver.setCancelable(false);
 
         displayOver.setPositiveButton("OK", new DialogInterface.OnClickListener() {
