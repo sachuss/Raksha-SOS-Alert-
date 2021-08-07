@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     startLocationUpdates();
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please set SOS phone numbers", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please set emergency phone numbers in SOS Numbers first.", Toast.LENGTH_LONG).show();
                 }
                     }
 
@@ -200,7 +200,7 @@ locationCallback = new LocationCallback(){
       cityNameLat = String.valueOf(mLocation.getLatitude());
       cityNameLon = String.valueOf(mLocation.getLongitude());
       if ((cityNameLat.equals(preCityNameLat)) && (cityNameLon.equals(preCityNameLon))) {
-          Toast.makeText(getApplicationContext(), "Location same as the previous send location...", Toast.LENGTH_SHORT).show();
+          Toast.makeText(getApplicationContext(), "An SOS message with current location details is already sent.", Toast.LENGTH_SHORT).show();
           MyGlobalClass.fall = true;
           fusedLocationProviderClient.removeLocationUpdates(locationCallback);
       } else {
@@ -221,7 +221,7 @@ locationCallback = new LocationCallback(){
     @Override
     public void onLocationAvailability(LocationAvailability locationAvailability) {
       if(locationAvailability.isLocationAvailable() == false)
-      {Toast.makeText(getApplicationContext(),"Loc not available",Toast.LENGTH_SHORT).show();}
+      {Toast.makeText(getApplicationContext(),"Sorry, unable to fetch the location of your mobile. Please turn on Location in your mobile settings.",Toast.LENGTH_SHORT).show();}
         super.onLocationAvailability(locationAvailability);
     }
 };
@@ -336,11 +336,11 @@ locationCallback = new LocationCallback(){
             case SMS_LOC_REQUEST_CODE: {
                 if (((grantResults).length > 0) && (grantResults[0] + grantResults[1]) == PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
 
 
                 } else {
-                    Toast.makeText(this, "SMS/Permissions Denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "SMS/Permissions Denied", Toast.LENGTH_SHORT).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Please grant SMS & Location permissions to proceed further.\n" +
                             "Application is going to exit");
@@ -387,7 +387,7 @@ locationCallback = new LocationCallback(){
 
 
         AlertDialog.Builder gpsBuilder = new AlertDialog.Builder(this);
-        gpsBuilder.setMessage("TURN ON GPS");
+        gpsBuilder.setMessage("Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings.");
         gpsBuilder.setCancelable(false);
 
         gpsBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -404,7 +404,7 @@ locationCallback = new LocationCallback(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
               //  ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
-                Toast.makeText(getApplicationContext(),"No Location Info will be available with Location turned OFF",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Raksha requires the location of your mobile for sending SOS SMS. Please turn on Location in your mobile settings.",Toast.LENGTH_LONG).show();
             }
         });
         AlertDialog dialog = gpsBuilder.create();
@@ -415,7 +415,7 @@ locationCallback = new LocationCallback(){
 
     protected void enableDisplayOver() {
         AlertDialog.Builder displayOver = new AlertDialog.Builder(this);
-        displayOver.setMessage("Please allow Raksha to display over other apps.");
+        displayOver.setMessage("Raksha requires permission to display over other apps.");
         displayOver.setCancelable(false);
 
         displayOver.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -640,7 +640,7 @@ locationCallback = new LocationCallback(){
 
                                     dialog.dismiss();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Please set sos phone numbers", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Please set emergency phone numbers in SOS Numbers first.", Toast.LENGTH_LONG).show();
                                     dialog.dismiss();
                                     MyGlobalClass.fall = true;
                                 }
