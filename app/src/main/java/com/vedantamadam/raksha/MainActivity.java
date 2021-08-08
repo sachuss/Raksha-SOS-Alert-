@@ -33,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -251,8 +252,25 @@ locationCallback = new LocationCallback(){
 
     public void popUpMessage()
     {
-        AlertDialog.Builder onBoarding = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
-        onBoarding.setTitle("Onboarding Instructions:");
+        AlertDialog.Builder onBoarding;
+        TextView textView;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            onBoarding = new AlertDialog.Builder(this,R.style.CustomAlertDialog);
+            onBoarding.setTitle("Onboarding Instructions:");
+        }
+        else
+        {
+            onBoarding = new AlertDialog.Builder(this);
+            textView = new TextView(this);
+            textView.setText("Onboarding Instructions:");
+            textView.setTextSize(20);
+            textView.setTextColor(Color.parseColor("#33e2e5"));
+            onBoarding.setCustomTitle(textView);
+        }
+
+
+
 
 
 
