@@ -19,7 +19,8 @@ Location fetched in 2613ms
 1. Configurable shake or drop sensitivity.
 
 # Insutructions
-1. In case of emergency, press the SOS button in Raksha app or drop or shake your mobile.
-2. In case the mobile is dropped or shaked a countdown of 10 seconds starts during which you can cancel sending SOS SMS.
-3. When the countdown ends, Raksha fetches your mobile location and sends an emergency SOS sms with your location to your emergency contacts.
-4. For the better functioning of Raksha app please turn off battery optimization for Raksha app. Follow insturctions here https://github.com/vedantamadam/BatteryOptimisation/wiki/Instructions.
+1. Register your emergency contact numbers under HOME/SOS and SAVE.
+1. Press the SOS button on the home page in case of an emergency. On pressing the button, an SOS message along with the link of your current location on google  maps will be send to the emergency contacts.
+1. Use the switch at the 'Fall Detection' page to turn ON/OFF Fall detection functionality and set the Sensitivity value as per your requirement. Switch turned ON will run the application in the background and if any violent shake/fall is detected,  an auto SOS procedure is initiated. You are advised to set your most preferable sensitivity value before registering contacts.
+1. Please tick 'Don't Optimise' for Raksha app in the Battery Settings for better performance of FALL DETECTION functionality.How to do it: https://github.com/vedantamadam/BatteryOptimisation/wiki/Instructions.
+1. For dual sim phones, please make sure to insert your messaging SIM in slot 1.
