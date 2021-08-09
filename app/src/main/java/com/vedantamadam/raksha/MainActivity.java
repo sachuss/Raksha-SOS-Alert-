@@ -332,11 +332,25 @@ locationCallback = new LocationCallback(){
     // Function to check and request permission.
     public void checkPermission() {
 
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
 
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                    {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.O) { /* Sending sms error in API 26: due to absence of read phone state permission: READ_PHONE_STATE PERMISSION ADDED*/
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
+                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
+                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
+
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]
+                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, SMS_LOC_REQUEST_CODE);
+            }
+        }
+        else /*Normal Permissions*/
+        {
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
+                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]
+                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, SMS_LOC_REQUEST_CODE);
+            }
+
         }
 
 
