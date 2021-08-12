@@ -1,14 +1,21 @@
 package com.vedantamadam.raksha;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import android.telephony.SmsManager;
 import android.widget.Toast;
+
+
 
 
 import java.util.ArrayList;
 
 public class MyGlobalClass {
+
+
+
     public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "",timestamp;
     public static long time_startLocUpdates, time_onLocationResult;
     public static boolean fall = true;
@@ -77,6 +84,7 @@ public class MyGlobalClass {
                 Toast.makeText(context, "Please set SOS contact numbers.", Toast.LENGTH_SHORT).show();
             }
         }catch (Exception ex){
+
             Toast.makeText(context, "Failed to send SOS", Toast.LENGTH_SHORT).show();
         }
     }
