@@ -109,7 +109,7 @@ public class MyGlobalClass {
                 .setDeniedMessage( deniedMessage)
                 .setDeniedCloseButtonText(android.R.string.ok)
                 .setGotoSettingButton(true)
-                .setPermissions(Manifest.permission.READ_CONTACTS)
+                .setPermissions(mPermission)
                 .check();
 
         return permission_approved;
