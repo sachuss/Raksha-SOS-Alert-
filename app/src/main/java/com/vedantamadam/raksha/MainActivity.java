@@ -364,7 +364,7 @@ locationCallback = new LocationCallback(){
         switch (requestCode) {
             case PERM_REQUEST_CODE: {
           //      if (((grantResults).length > 0) && (grantResults[0] + grantResults[1] + grantResults[2]) == PackageManager.PERMISSION_GRANTED) {
-                if ( (grantResults[0]  == PackageManager.PERMISSION_GRANTED) && (grantResults[1]  == PackageManager.PERMISSION_GRANTED) && (grantResults[2]  == PackageManager.PERMISSION_GRANTED)) {
+                if ( (grantResults[0]  == PackageManager.PERMISSION_GRANTED) && (grantResults[1]  == PackageManager.PERMISSION_GRANTED)) {
 //                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
 
 
