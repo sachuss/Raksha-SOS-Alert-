@@ -196,10 +196,10 @@ public class SosActivity extends AppCompatActivity  {
                     assert phoneCur != null;
                     if (phoneCur.moveToFirst()) {
                         do {
-                            Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                            Name = phoneCur.getString(phoneCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                             String phone = phoneCur
                                     .getString(phoneCur
-                                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+                                            .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DATA));
                             phonesList.add(phone);
 
                         } while (phoneCur.moveToNext());
