@@ -2,31 +2,47 @@ package com.vedantamadam.raksha;
 
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
-
-
+import android.Manifest;
+import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 
-
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 
+import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SosActivity extends AppCompatActivity  {
+    private static final int PICK_CONTACT1 = 911, PICK_CONTACT2 = 912, CONTACT_READ_PERMISSION_CODE = 913 ;
     Toolbar toolbarSos;
     EditText emergencyNo1, emergencyNo2;
     Button saveBut,clearBut;
     private String phoneN1, phoneN2;
     public  String appendedPh1,appendedPh2;
+
 
 
     @Override
@@ -39,6 +55,8 @@ public class SosActivity extends AppCompatActivity  {
          clearBut = (Button) findViewById(R.id.butClear);
 
 
+
+
         toolbarSos = (Toolbar) findViewById(R.id.toolbarSOS);
         toolbarSos.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +65,34 @@ public class SosActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+
+
+
+
+
+        emergencyNo1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                            ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(contactPickerIntent, PICK_CONTACT1);
+
+
+            }
+        });
+        emergencyNo2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                            ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(contactPickerIntent, PICK_CONTACT2);
+
+
+            }
+        });
+
 
 
 
@@ -123,6 +169,149 @@ public class SosActivity extends AppCompatActivity  {
         }
 
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == PICK_CONTACT1) && (resultCode == RESULT_OK)) {
+            if (data != null) {
+                Uri contactData = data.getData();
+
+                try {
+
+                    String id = contactData.getLastPathSegment();
+                    String[] columns = {ContactsContract.CommonDataKinds.Phone.DATA, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+                    Cursor phoneCur = getContentResolver()
+                            .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    columns,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                            + " = ?", new String[]{id},
+                                    null);
+
+                    final ArrayList<String> phonesList = new ArrayList<String>();
+                    String Name = null;
+                    if (phoneCur.moveToFirst()) {
+                        do {
+                            Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                            String phone = phoneCur
+                                    .getString(phoneCur
+                                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+                            phonesList.add(phone);
+
+                        } while (phoneCur.moveToNext());
+
+                    }
+
+
+                    phoneCur.close();
+
+                    if (phonesList.size() == 0) {
+                        Toast.makeText(
+                                this, "This contact does not contain any numbers...",
+                                Toast.LENGTH_LONG).show();
+                    } else if (phonesList.size() == 1) {
+                        emergencyNo1.setText(phonesList.get(0));
+                    } else {
+
+                        final String[] phonesArr = new String[phonesList
+                                .size()];
+                        for (int i = 0; i < phonesList.size(); i++) {
+                            phonesArr[i] = phonesList.get(i);
+                        }
+
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(
+                                SosActivity.this);
+                        dialog.setTitle("Name : " + Name);
+                        ((AlertDialog.Builder) dialog).setItems(phonesArr,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        String selectedPhoneNumber = phonesArr[which];
+                                        emergencyNo1.setText(selectedPhoneNumber);
+                                    }
+                                }).create();
+                        dialog.show();
+                    }
+                } catch (Exception e) {
+                    Log.e("FILES", "Failed to get phone data", e);
+                }
+            }
+
+        }
+
+        if ((requestCode == PICK_CONTACT2) && (resultCode == RESULT_OK)) {
+            if (data != null) {
+                Uri contactData = data.getData();
+
+                try {
+
+                    String id = contactData.getLastPathSegment();
+                    String[] columns = {ContactsContract.CommonDataKinds.Phone.DATA, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+                    Cursor phoneCur = getContentResolver()
+                            .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    columns,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                            + " = ?", new String[]{id},
+                                    null);
+
+                    final ArrayList<String> phonesList = new ArrayList<String>();
+                    String Name = null;
+                    if (phoneCur.moveToFirst()) {
+                        do {
+                            Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                            String phone = phoneCur
+                                    .getString(phoneCur
+                                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+                            phonesList.add(phone);
+
+                        } while (phoneCur.moveToNext());
+
+                    }
+
+
+                    phoneCur.close();
+
+                    if (phonesList.size() == 0) {
+                        Toast.makeText(
+                                this, "This contact does not contain any numbers...",
+                                Toast.LENGTH_LONG).show();
+                    } else if (phonesList.size() == 1) {
+                        emergencyNo2.setText(phonesList.get(0));
+                    } else {
+
+                        final String[] phonesArr = new String[phonesList
+                                .size()];
+                        for (int i = 0; i < phonesList.size(); i++) {
+                            phonesArr[i] = phonesList.get(i);
+                        }
+
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(
+                                SosActivity.this);
+                        dialog.setTitle("Name : " + Name);
+                        ((AlertDialog.Builder) dialog).setItems(phonesArr,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        String selectedPhoneNumber = phonesArr[which];
+                                        emergencyNo2.setText(selectedPhoneNumber);
+                                    }
+                                }).create();
+                        dialog.show();
+                    }
+                } catch (Exception e) {
+                    Log.e("FILES", "Failed to get phone data", e);
+                }
+            }
+
+        }
+    }
+
+
 
     public void loadDat()
     {
