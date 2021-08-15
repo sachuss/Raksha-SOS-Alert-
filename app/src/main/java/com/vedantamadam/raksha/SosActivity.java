@@ -193,6 +193,7 @@ public class SosActivity extends AppCompatActivity  {
 
                     final ArrayList<String> phonesList = new ArrayList<String>();
                     String Name = null;
+                    assert phoneCur != null;
                     if (phoneCur.moveToFirst()) {
                         do {
                             Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -260,6 +261,7 @@ public class SosActivity extends AppCompatActivity  {
 
                     final ArrayList<String> phonesList = new ArrayList<String>();
                     String Name = null;
+                    assert phoneCur != null;
                     if (phoneCur.moveToFirst()) {
                         do {
                             Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
