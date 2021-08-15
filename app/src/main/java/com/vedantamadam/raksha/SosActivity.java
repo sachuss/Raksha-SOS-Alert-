@@ -262,6 +262,7 @@ public class SosActivity extends AppCompatActivity  {
                     final ArrayList<String> phonesList = new ArrayList<String>();
                     String Name = null;
                     assert phoneCur != null;
+               //     Toast.makeText(this);
                     if (phoneCur.moveToFirst()) {
                         do {
                             Name = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
