@@ -1,7 +1,6 @@
 package com.vedantamadam.raksha;
 
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -32,71 +32,72 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SosActivity extends AppCompatActivity  {
-    private static final int PICK_CONTACT1 = 911, PICK_CONTACT2 = 912, CONTACT_READ_PERMISSION_CODE = 913 ;
+
+public class SosActivity extends AppCompatActivity {
+    private static final int PICK_CONTACT1 = 911, PICK_CONTACT2 = 912, CONTACT_READ_PERMISSION_CODE = 913;
+    public String appendedPh1, appendedPh2;
     Toolbar toolbarSos;
     EditText emergencyNo1, emergencyNo2;
-    Button saveBut,clearBut;
+    Button saveBut, clearBut;
     private String phoneN1, phoneN2;
-    public  String appendedPh1,appendedPh2;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
-         emergencyNo1 = (EditText) findViewById(R.id.sos1);
-         emergencyNo2 = (EditText)  findViewById(R.id.sos2);
-         saveBut = (Button)  findViewById(R.id.save);
-         clearBut = (Button) findViewById(R.id.butClear);
-
-
+        emergencyNo1 = (EditText) findViewById(R.id.sos1);
+        emergencyNo2 = (EditText) findViewById(R.id.sos2);
+        saveBut = (Button) findViewById(R.id.save);
+        clearBut = (Button) findViewById(R.id.butClear);
 
 
         toolbarSos = (Toolbar) findViewById(R.id.toolbarSOS);
         toolbarSos.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
 
+        if (MyGlobalClass.checkPermission(Manifest.permission.READ_CONTACTS, getApplicationContext(), getString(R.string.contact_denied))) {
+            emergencyNo1.setFocusableInTouchMode(false);
+            emergencyNo2.setFocusableInTouchMode(false);
 
+            emergencyNo1.setOnClickListener(new View.OnClickListener() {
 
-
-
-        emergencyNo1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
                             ContactsContract.Contacts.CONTENT_URI);
                     startActivityForResult(contactPickerIntent, PICK_CONTACT1);
 
 
-            }
-        });
-        emergencyNo2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                }
+            });
+
+            emergencyNo2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
                     Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
                             ContactsContract.Contacts.CONTENT_URI);
                     startActivityForResult(contactPickerIntent, PICK_CONTACT2);
 
 
-            }
-        });
-
-
-
-
-
+                }
+            });
+        } else {
+            emergencyNo1.setFocusableInTouchMode(true);
+            emergencyNo2.setFocusableInTouchMode(true);
+        }
 
 
         saveBut.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +106,8 @@ public class SosActivity extends AppCompatActivity  {
 
                 //Delete existing SOS contact number before a new save.
                 //This will be helpful to prevent persisting old values when one of the sos contact number needs to deleted.
-                MyGlobalClass.delete_pref(getApplicationContext(),"e1");
-                MyGlobalClass.delete_pref(getApplicationContext(),"e2");
+                MyGlobalClass.delete_pref(getApplicationContext(), "e1");
+                MyGlobalClass.delete_pref(getApplicationContext(), "e2");
 
                 String ph1 = PhoneNumberUtils.formatNumberToE164(emergencyNo1.getText().toString(), "IN");
                 String ph2 = PhoneNumberUtils.formatNumberToE164(emergencyNo2.getText().toString(), "IN");
@@ -115,11 +116,11 @@ public class SosActivity extends AppCompatActivity  {
                 if ((ph1 == null || ph1.isEmpty()) && (ph2 == null || ph2.isEmpty())) {
                     // If there is no valid mobile no. entered or both the phonenumber edittext are empty
                     Toast.makeText(getApplicationContext(), "Please enter at least one valid SOS contact number.", Toast.LENGTH_SHORT).show();
-                } else if (emergencyNo1.getText().length()!=0 && ph1 == null){
+                } else if (emergencyNo1.getText().length() != 0 && ph1 == null) {
                     //Invalid mobile no. is entered in emergencyNo1
                     Toast.makeText(getApplicationContext(), "Please enter valid SOS contact number.", Toast.LENGTH_SHORT).show();
                     emergencyNo1.getText().clear();
-                } else if (emergencyNo2.getText().length()!=0 && ph2 == null){
+                } else if (emergencyNo2.getText().length() != 0 && ph2 == null) {
                     //Invalid mobile no. is entered in emergencyNo2
                     Toast.makeText(getApplicationContext(), "Please enter valid SOS contact number.", Toast.LENGTH_SHORT).show();
                     emergencyNo2.getText().clear();
@@ -141,12 +142,11 @@ public class SosActivity extends AppCompatActivity  {
         clearBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if((emergencyNo1.getText().length() != 0) || (emergencyNo2.getText().length() != 0) ) {
+                if ((emergencyNo1.getText().length() != 0) || (emergencyNo2.getText().length() != 0)) {
 
 
-                    MyGlobalClass.delete_pref(getApplicationContext(),"e1");
-                    MyGlobalClass.delete_pref(getApplicationContext(),"e2");
-
+                    MyGlobalClass.delete_pref(getApplicationContext(), "e1");
+                    MyGlobalClass.delete_pref(getApplicationContext(), "e2");
 
 
                     emergencyNo1.getText().clear();
@@ -155,21 +155,20 @@ public class SosActivity extends AppCompatActivity  {
                     appendedPh1 = null;
                     appendedPh2 = null;
 
-                    MyGlobalClass.phoneNumber1="";
-                    MyGlobalClass.phoneNumber2="";
+                    MyGlobalClass.phoneNumber1 = "";
+                    MyGlobalClass.phoneNumber2 = "";
 
                 }
             }
         });
 
 
-        if(emergencyNo1.getText().length() == 0 && emergencyNo2.getText().length() == 0 ) {
+        if (emergencyNo1.getText().length() == 0 && emergencyNo2.getText().length() == 0) {
             loadDat();
             updateView();
         }
 
     }
-
 
 
     @Override
@@ -262,7 +261,7 @@ public class SosActivity extends AppCompatActivity  {
                     final ArrayList<String> phonesList = new ArrayList<String>();
                     String Name = null;
                     assert phoneCur != null;
-               //     Toast.makeText(this);
+                    //     Toast.makeText(this);
                     if (phoneCur.moveToFirst()) {
                         do {
                             Name = phoneCur.getString(phoneCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -315,37 +314,27 @@ public class SosActivity extends AppCompatActivity  {
     }
 
 
-
-    public void loadDat()
-    {
+    public void loadDat() {
 
 
-
-
-        phoneN1 = MyGlobalClass.read_pref(getApplicationContext(),"e1");
-        phoneN2 = MyGlobalClass.read_pref(getApplicationContext(),"e2");
+        phoneN1 = MyGlobalClass.read_pref(getApplicationContext(), "e1");
+        phoneN2 = MyGlobalClass.read_pref(getApplicationContext(), "e2");
 
     }
 
-    public void updateView()
-    {
+    public void updateView() {
         emergencyNo1.setText(phoneN1);
         emergencyNo2.setText(phoneN2);
 
     }
 
 
-
-
     public void onStop() {
 
         super.onStop();
-   
 
 
     }
-
-
 
 
 }

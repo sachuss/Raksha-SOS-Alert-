@@ -1,17 +1,26 @@
 package com.vedantamadam.raksha;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.view.View;
 import android.widget.Toast;
 
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyGlobalClass {
     public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "",timestamp;
     public static long time_startLocUpdates, time_onLocationResult;
     public static boolean fall = true;
+    public static boolean permission_approved = false;
 
 
     public static void save_pref(Context context, String key, String value) {
@@ -82,5 +91,28 @@ public class MyGlobalClass {
     }
 
 
+    public static boolean checkPermission(String mPermission, Context context, String deniedMessage)
+    {
+        new TedPermission()
+                .with(context)
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        permission_approved = true;
+                    }
+
+                    @Override
+                    public void onPermissionDenied(List<String> deniedPermissions) {
+                        permission_approved = false;
+                    }
+                })
+                .setDeniedMessage( deniedMessage)
+                .setDeniedCloseButtonText(android.R.string.ok)
+                .setGotoSettingButton(true)
+                .setPermissions(Manifest.permission.READ_CONTACTS)
+                .check();
+
+        return permission_approved;
+    }
 
 }
