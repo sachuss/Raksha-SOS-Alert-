@@ -11,8 +11,7 @@ android {
 
         versionCode 11
         versionName '10.1'
-
-
+        archivesBaseName = "$applicationId-v$versionName"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
@@ -20,6 +19,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            versionNameSuffix "-T"
         }
     }
     compileOptions {
