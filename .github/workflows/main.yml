@@ -14,6 +14,7 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew build
+          ls -al app/build/outputs/apk/debug/app-debug.apk
       - name: Download a Build Artifact
         uses: actions/download-artifact@v2.0.10
         with:
