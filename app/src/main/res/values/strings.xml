@@ -2,5 +2,7 @@
     <string name="app_name">Raksha</string>
     <string name="sos">SOS</string>
     <string name="hint"><font size = "20"></font></string>
+    <string name="contact_denied">Emergency phone numbers cannot be fetched from contacts as access to Contacts is denied.\n\nTo allow Contact permissions navigate to Setting > Permission</string>
+
 
 </resources>

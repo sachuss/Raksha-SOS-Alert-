@@ -336,21 +336,19 @@ locationCallback = new LocationCallback(){
         if(Build.VERSION.SDK_INT == Build.VERSION_CODES.O) { /* Sending sms error in API 26: due to absence of read phone state permission: READ_PHONE_STATE PERMISSION ADDED*/
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
                     || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
-                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED
-                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED) {
+                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
 
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS}, PERM_REQUEST_CODE_API26);
+                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, PERM_REQUEST_CODE_API26);
             }
         }
         else /*Normal Permissions*/
         {
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_DENIED
-                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
-                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED) {
+                    || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
 
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_CONTACTS}, PERM_REQUEST_CODE);
+                        {Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_FINE_LOCATION}, PERM_REQUEST_CODE);
             }
 
         }
@@ -366,7 +364,7 @@ locationCallback = new LocationCallback(){
         switch (requestCode) {
             case PERM_REQUEST_CODE: {
           //      if (((grantResults).length > 0) && (grantResults[0] + grantResults[1] + grantResults[2]) == PackageManager.PERMISSION_GRANTED) {
-                if ( (grantResults[0]  == PackageManager.PERMISSION_GRANTED) && (grantResults[1]  == PackageManager.PERMISSION_GRANTED) && (grantResults[2]  == PackageManager.PERMISSION_GRANTED)) {
+                if ( (grantResults[0]  == PackageManager.PERMISSION_GRANTED) && (grantResults[1]  == PackageManager.PERMISSION_GRANTED)) {
 //                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
 
 
@@ -394,7 +392,7 @@ locationCallback = new LocationCallback(){
             case PERM_REQUEST_CODE_API26: {
                 //      if (((grantResults).length > 0) && (grantResults[0] + grantResults[1] + grantResults[2]) == PackageManager.PERMISSION_GRANTED) {
                 if ( (grantResults[0]  == PackageManager.PERMISSION_GRANTED) && (grantResults[1]  == PackageManager.PERMISSION_GRANTED)
-                        && (grantResults[2]  == PackageManager.PERMISSION_GRANTED) && (grantResults[3]  == PackageManager.PERMISSION_GRANTED)  ) {
+                        && (grantResults[2]  == PackageManager.PERMISSION_GRANTED)   ) {
 //                    Toast.makeText(this, "SMS & Location permissions granted", Toast.LENGTH_SHORT).show();
 
 
