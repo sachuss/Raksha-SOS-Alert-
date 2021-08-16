@@ -65,29 +65,29 @@ public class MyGlobalClass {
             return null;
         }
     }
-
-    public static boolean checkPermission(String mPermission, Context context, String deniedMessage) {
-        new TedPermission()
-                .with(context)
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted() {
-                        permission_approved = true;
-                    }
-
-                    @Override
-                    public void onPermissionDenied(List<String> deniedPermissions) {
-                        permission_approved = false;
-                    }
-                })
-                .setDeniedMessage(deniedMessage)
-                .setDeniedCloseButtonText(android.R.string.ok)
-                .setGotoSettingButton(true)
-                .setPermissions(mPermission)
-                .check();
-
-        return permission_approved;
-    }
+    // onPermissionGranted/onPermissionDenied are async calls so this won't return immediately.
+//    public static boolean checkPermission(String mPermission, Context context, String deniedMessage) {
+//        new TedPermission()
+//                .with(context)
+//                .setPermissionListener(new PermissionListener() {
+//                    @Override
+//                    public void onPermissionGranted() {
+//                        permission_approved = true;
+//                    }
+//
+//                    @Override
+//                    public void onPermissionDenied(List<String> deniedPermissions) {
+//                        permission_approved = false;
+//                    }
+//                })
+//                .setDeniedMessage(deniedMessage)
+//                .setDeniedCloseButtonText(android.R.string.ok)
+//                .setGotoSettingButton(true)
+//                .setPermissions(mPermission)
+//                .check();
+//
+//        return permission_approved;
+//    }
 
     public void sendSMS(Context context, String msg) {
         try {

@@ -27,7 +27,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SosActivity extends AppCompatActivity {
@@ -57,38 +62,43 @@ public class SosActivity extends AppCompatActivity {
             }
         });
 
-        if (MyGlobalClass.checkPermission(Manifest.permission.READ_CONTACTS, getApplicationContext(), getString(R.string.contact_denied))) {
-            emergencyNo1.setFocusableInTouchMode(false);
-            emergencyNo2.setFocusableInTouchMode(false);
+        new TedPermission()
+                .with(getApplicationContext())
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        emergencyNo1.setFocusableInTouchMode(false);
+                        emergencyNo2.setFocusableInTouchMode(false);
+                        emergencyNo1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-            emergencyNo1.setOnClickListener(new View.OnClickListener() {
+                                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                                        ContactsContract.Contacts.CONTENT_URI);
+                                startActivityForResult(contactPickerIntent, PICK_CONTACT1);
+                            }
+                        });
+                        emergencyNo2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                                        ContactsContract.Contacts.CONTENT_URI);
+                                startActivityForResult(contactPickerIntent, PICK_CONTACT2);
+                            }
+                        });
+                    }
 
-                @Override
-                public void onClick(View v) {
-
-                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-                            ContactsContract.Contacts.CONTENT_URI);
-                    startActivityForResult(contactPickerIntent, PICK_CONTACT1);
-
-
-                }
-            });
-
-            emergencyNo2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-                            ContactsContract.Contacts.CONTENT_URI);
-                    startActivityForResult(contactPickerIntent, PICK_CONTACT2);
-
-
-                }
-            });
-        } else {
-            emergencyNo1.setFocusableInTouchMode(true);
-            emergencyNo2.setFocusableInTouchMode(true);
-        }
+                    @Override
+                    public void onPermissionDenied(List<String> deniedPermissions) {
+                        emergencyNo1.setFocusableInTouchMode(true);
+                        emergencyNo2.setFocusableInTouchMode(true);
+                    }
+                })
+                .setDeniedMessage(getString(R.string.contact_denied))
+                .setDeniedCloseButtonText(android.R.string.ok)
+                .setGotoSettingButton(true)
+                .setPermissions(Manifest.permission.READ_CONTACTS)
+                .check();
 
 
         saveBut.setOnClickListener(new View.OnClickListener() {
