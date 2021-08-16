@@ -20,5 +20,3 @@ jobs:
           # A file, directory or wildcard pattern that describes what to upload
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
-      - name: workflow artifact pull request comment
-        uses: tonyhallett/artifacts-url-comments@v1.1.0
