@@ -13,4 +13,6 @@ jobs:
       - name: Build the app
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew assembleDebug
+          ls
+          find / -name *.apk
