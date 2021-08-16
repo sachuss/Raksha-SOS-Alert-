@@ -1,9 +1,6 @@
 name: Build
 on: 
   pull_request:
-  push:
-      branches:
-        - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +16,9 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           # Artifact name
-          name: PR-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          name: debug-apk
           # A file, directory or wildcard pattern that describes what to upload
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+      - name: workflow artifact pull request comment
+        uses: tonyhallett/artifacts-url-comments@v1.1.0
