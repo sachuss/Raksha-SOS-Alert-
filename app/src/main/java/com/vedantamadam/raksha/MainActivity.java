@@ -61,6 +61,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import io.realm.Realm;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -105,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Initialize Realm Database
+        Realm.init(this);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
