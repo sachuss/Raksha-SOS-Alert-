@@ -110,15 +110,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //Initialize Realm Database
-        Realm.init(this);
-        String realmName = getString(R.string.db_name);
-        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
-        Realm backgroundThreadRealm = Realm.getInstance(config);
-        Realm realm = Realm.getInstance(config);
-        Log.v("raksha", "Realm file path: " + realm.getPath());
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
