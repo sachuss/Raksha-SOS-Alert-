@@ -19,6 +19,7 @@
         android:largeHeap="true"
         android:roundIcon="@drawable/sosc"
         android:supportsRtl="true"
+        android:name=".RakshaApp"
 
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <receiver

@@ -24,6 +24,7 @@ import android.os.CountDownTimer;
 
 import android.provider.Settings;
 
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -60,6 +61,9 @@ import java.util.Calendar;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {

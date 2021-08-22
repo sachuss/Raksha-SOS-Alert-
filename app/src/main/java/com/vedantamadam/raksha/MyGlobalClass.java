@@ -3,13 +3,18 @@ package com.vedantamadam.raksha;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.vedantamadam.raksha.models.EmergencyContact;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MyGlobalClass {
     public static String phoneNumber1 = "", phoneNumber2 = "", senstivityNumber = "", timestamp;
@@ -108,4 +113,5 @@ public class MyGlobalClass {
         }
     }
 
-}
+}//eo class
+
