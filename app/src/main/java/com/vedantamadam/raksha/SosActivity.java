@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.vedantamadam.raksha.models.*;
 
 
 import android.Manifest;
@@ -34,7 +35,10 @@ import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 
+
+// Activity where SOS contact are added
 public class SosActivity extends AppCompatActivity {
     private static final int PICK_CONTACT1 = 911, PICK_CONTACT2 = 912, CONTACT_READ_PERMISSION_CODE = 913;
     public String appendedPh1, appendedPh2;
@@ -43,8 +47,11 @@ public class SosActivity extends AppCompatActivity {
     Button saveBut, clearBut;
     private String phoneN1, phoneN2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
         emergencyNo1 = (EditText) findViewById(R.id.sos1);
@@ -128,9 +135,11 @@ public class SosActivity extends AppCompatActivity {
                 } else { // All the entered SOS contact number. Going to save
                     if (ph1 != null) {
                         MyGlobalClass.save_pref(getApplicationContext(), "e1", ph1);
+                        DbHelper.db_saveSOSContacts(new EmergencyContact("name",ph1));
                     }
                     if (ph2 != null) {
                         MyGlobalClass.save_pref(getApplicationContext(), "e2", ph2);
+                        DbHelper.db_saveSOSContacts(new EmergencyContact("name",ph2));
                     }
 
                     Toast.makeText(getApplicationContext(), "Successfully saved SOS contact numbers.", Toast.LENGTH_LONG).show();

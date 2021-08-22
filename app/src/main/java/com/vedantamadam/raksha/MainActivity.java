@@ -24,6 +24,7 @@ import android.os.CountDownTimer;
 
 import android.provider.Settings;
 
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -62,6 +63,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -110,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //Initialize Realm Database
         Realm.init(this);
+        String realmName = getString(R.string.db_name);
+        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
+        Realm backgroundThreadRealm = Realm.getInstance(config);
+        Realm realm = Realm.getInstance(config);
+        Log.v("raksha", "Realm file path: " + realm.getPath());
 
 
         super.onCreate(savedInstanceState);
