@@ -26,12 +26,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -40,6 +42,7 @@ public class SosActivity extends AppCompatActivity {
     public String appendedPh1, appendedPh2;
     Toolbar toolbarSos;
     EditText emergencyNo1, emergencyNo2;
+    TextView  sos1_name, sos2_name;
     Button saveBut, clearBut;
     private String phoneN1, phoneN2;
 
@@ -192,6 +195,7 @@ public class SosActivity extends AppCompatActivity {
                                     null);
 
                     final ArrayList<String> phonesList = new ArrayList<String>();
+                    HashMap<String,String> contactsmap=new HashMap<String,String>();//Creating HashMap
                     String Name = null;
                     assert phoneCur != null;
                     if (phoneCur.moveToFirst()) {
@@ -201,6 +205,7 @@ public class SosActivity extends AppCompatActivity {
                                     .getString(phoneCur
                                             .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DATA));
                             phonesList.add(phone);
+                            contactsmap.put(phone,Name);
 
                         } while (phoneCur.moveToNext());
 
@@ -209,12 +214,17 @@ public class SosActivity extends AppCompatActivity {
 
                     phoneCur.close();
 
-                    if (phonesList.size() == 0) {
+                    if (phonesList.size()==0) {
                         Toast.makeText(
                                 this, "This contact does not contain any numbers...",
                                 Toast.LENGTH_LONG).show();
                     } else if (phonesList.size() == 1) {
-                        emergencyNo1.setText(phonesList.get(0));
+                        //How to get the value
+                        String ph_no = phonesList.get(0);
+                        emergencyNo1.setText(ph_no);
+                        sos1_name = (TextView) findViewById(R.id.sos1_name);
+                        sos1_name.setText(contactsmap.get(ph_no));
+
                     } else {
 
                         final String[] phonesArr = new String[phonesList
@@ -233,6 +243,7 @@ public class SosActivity extends AppCompatActivity {
                                             int which) {
                                         String selectedPhoneNumber = phonesArr[which];
                                         emergencyNo1.setText(selectedPhoneNumber);
+                                        sos1_name = (TextView) findViewById(R.id.sos1_name);
                                     }
                                 }).create();
                         dialog.show();
@@ -261,6 +272,7 @@ public class SosActivity extends AppCompatActivity {
 
                     final ArrayList<String> phonesList = new ArrayList<String>();
                     String Name = null;
+                    HashMap<String,String> contactsmap2=new HashMap<String,String>();//Creating HashMap
                     assert phoneCur != null;
                     //     Toast.makeText(this);
                     if (phoneCur.moveToFirst()) {
@@ -270,6 +282,7 @@ public class SosActivity extends AppCompatActivity {
                                     .getString(phoneCur
                                             .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DATA));
                             phonesList.add(phone);
+                            contactsmap2.put(phone,Name);
 
                         } while (phoneCur.moveToNext());
 
@@ -284,6 +297,13 @@ public class SosActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     } else if (phonesList.size() == 1) {
                         emergencyNo2.setText(phonesList.get(0));
+                        sos2_name = (TextView) findViewById(R.id.sos2_name);
+
+                        String ph_no2 = phonesList.get(0);
+                        emergencyNo2.setText(ph_no2);
+                        sos2_name = (TextView) findViewById(R.id.sos2_name);
+                        sos2_name.setText(contactsmap2.get(ph_no2));
+
                     } else {
 
                         final String[] phonesArr = new String[phonesList
