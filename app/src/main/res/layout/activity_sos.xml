@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:id="@+id/sos1_name"
                 android:gravity="center"
                 android:text="Emergency Number 1"
                 android:layout_marginLeft="20sp"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="Emergency Number 2"
                 android:layout_marginLeft="20sp"
-
+                android:id="@+id/sos2_name"
                 android:textColor="@android:color/holo_blue_bright"
                 android:textSize="12dp"
                 android:textStyle="bold"
